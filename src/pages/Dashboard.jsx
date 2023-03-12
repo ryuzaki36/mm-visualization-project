@@ -1,9 +1,7 @@
 import clsx from "https://cdn.skypack.dev/clsx@1.1.1";
-import * as React from 'react';
-import * as ReactSpring from 'react-spring';
+import {useState} from 'react';
+import { useSpring, animated, config} from 'react-spring';
 // import * as Recharts from 'recharts';
-const { useState } = React;
-const { useSpring, animated, config} = ReactSpring;
 // const { LineChart,
 //   Line,
 //   XAxis,
