@@ -3,7 +3,24 @@ import { useContext, useState } from "react";
 import { useSpring, animated, config } from "react-spring";
 import { Airport } from "../components/Airport";
 import Loader from "../components/Loader";
-import { FlightsContext } from "../context/flights";
+import { TooltipWithAnimation } from "../components/Tooltip";
+import { FlightsContext } from "../context/Flights";
+
+const AIRPLANE_IMG = {
+  "Air Canada":
+    "https://cdn.businesstraveller.com/wp-content/uploads/fly-images/931180/Air-Canada-B737-Max-e1556277651551-916x515.jpg",
+  "Lynx Air":
+    "https://static.routesonline.com/images/cached/newsarticle-297407-scaled-580x0.jpg",
+  WestJet:
+    "https://media-cdn.tripadvisor.com/media/photo-s/0e/cd/52/7e/westjet.jpg",
+  "Sunwing Airlines Inc.":
+    "https://cdn.travelpulse.com/images/99999999-9999-9999-9999-999999999999/89df9176-f00b-54db-3ee4-0294839441fd/600x400.png",
+  Flair:
+    "https://www.theaureview.com/au-content/uploads/2022/01/flair_airlines_new_aircraft_1-e1642455562977.jpg",
+  "Porter Airlines":
+    "https://s28477.pcdn.co/wp-content/uploads/2019/09/Porter_2-984x554.jpg",
+};
+
 // import * as Recharts from 'recharts';
 // const { LineChart,
 //   Line,
@@ -535,7 +552,7 @@ function Content({ onSidebarHide }) {
 //               tickMargin={10}
 //             />
 //             <YAxis axisLine={false} tickLine={false} tickMargin={10} />
-//             <Tooltip content={<CustomTooltip />} cursor={false} />
+
 //             <Line
 //               activeDot={false}
 //               type="monotone"
@@ -594,49 +611,57 @@ function TopFlights() {
         <div className="w-full sm:w-1/6">Scheduled Time</div>
         <div className="w-full sm:w-1/6">Estimated Time</div>
       </div>
-      {isLoading? <Loader/> : flights.map(
-        ({
-          Id,
-          ScheduledTime,
-          EstimatedTime,
-          Airline,
-          Airport,
-          FlightNumber,
-          YycStatus,
-        }) => {
-          const scheduled = new Date(ScheduledTime).toLocaleTimeString(
-            "en-US",
-            { hour12: false, hour: "2-digit", minute: "2-digit" }
-          );
-          const estimated = new Date(EstimatedTime).toLocaleTimeString(
-            "en-US",
-            { hour12: false, hour: "2-digit", minute: "2-digit" }
-          );
-          return (
-            <div
-              className="flex flex-wrap items-center mt-3 border-b-2 border-gray-700 pb-2"
-              key={Id}
-            >
-              <div className="w-full sm:w-1/6">{FlightNumber}</div>
-              <div className="w-full sm:w-1/6">{Airline.Name}</div>
-              <div className="w-full sm:w-1/6">{Airport.Name}</div>
-              <div className="w-full sm:w-1/6">
-                {YycStatus.PrimaryStatus.ShortEnglishText && (
-                  <animated.button
-                    className={`inline-block rounded-md text-white font-semibold py-2 px-4 my-2 sm:my-0 transition-colors duration-300 ${getStatusButtonStyles(
-                      YycStatus.PrimaryStatus.ShortEnglishText
-                    )}`}
-                    style={buttonAnimation}
-                  >
-                    {YycStatus.PrimaryStatus.ShortEnglishText}
-                  </animated.button>
-                )}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        flights.map(
+          ({
+            Id,
+            ScheduledTime,
+            EstimatedTime,
+            Airline,
+            Airport,
+            FlightNumber,
+            YycStatus,
+          }) => {
+            const scheduled = new Date(ScheduledTime).toLocaleTimeString(
+              "en-US",
+              { hour12: false, hour: "2-digit", minute: "2-digit" }
+            );
+            const estimated = new Date(EstimatedTime).toLocaleTimeString(
+              "en-US",
+              { hour12: false, hour: "2-digit", minute: "2-digit" }
+            );
+            return (
+              <div
+                className="flex flex-wrap items-center mt-3 border-b-2 border-gray-700 pb-2"
+                key={Id}
+              >
+                <div className="w-full sm:w-1/6">{FlightNumber}</div>
+                <div className="w-full sm:w-1/6">
+                  <TooltipWithAnimation content={AIRPLANE_IMG[Airline.Name]}>
+                    {Airline.Name}
+                  </TooltipWithAnimation>
+                </div>
+                <div className="w-full sm:w-1/6">{Airport.Name}</div>
+                <div className="w-full sm:w-1/6">
+                  {YycStatus.PrimaryStatus.ShortEnglishText && (
+                    <animated.button
+                      className={`inline-block rounded-md text-white font-semibold py-2 px-4 my-2 sm:my-0 transition-colors duration-300 ${getStatusButtonStyles(
+                        YycStatus.PrimaryStatus.ShortEnglishText
+                      )}`}
+                      style={buttonAnimation}
+                    >
+                      {YycStatus.PrimaryStatus.ShortEnglishText}
+                    </animated.button>
+                  )}
+                </div>
+                <div className="w-full sm:w-1/6">{scheduled}</div>
+                <div className="w-full sm:w-1/6">{estimated}</div>
               </div>
-              <div className="w-full sm:w-1/6">{scheduled}</div>
-              <div className="w-full sm:w-1/6">{estimated}</div>
-            </div>
-          );
-        }
+            );
+          }
+        )
       )}
       <div className="flex-grow" />
       <div className="flex justify-center">

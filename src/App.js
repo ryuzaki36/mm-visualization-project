@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import FlightsProvider from "./context/flights";
+import FlightsProvider from "./context/Flights";
 import Dashboard from "./pages/Dashboard";
 
 function App() {
