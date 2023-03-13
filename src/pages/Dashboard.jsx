@@ -18,7 +18,6 @@ const {
   BarChart,
   Bar,
   Legend,
-  Animated,
 } = Recharts;
 
 const AIRPLANE_IMG = {
@@ -501,29 +500,6 @@ function Content({ onSidebarHide }) {
   );
 }
 
-const customBar = (props) => {
-  const { payload } = props;
-  const radius = 10;
-  return (
-    <Animated
-      animationDuration={500}
-      animationBegin={0}
-      animationEasing="ease"
-      from={{ width: 0, x: props.x + props.width / 2 }}
-      to={{ width: props.width, x: props.x }}
-    >
-      <rect
-        rx={radius}
-        ry={radius}
-        x={props.x}
-        y={props.y}
-        width={props.width}
-        height={props.height}
-        fill={payload.color}
-      />
-    </Animated>
-  );
-};
 
 // function NameCard({
 //   name,
