@@ -5,6 +5,7 @@ export const FlightsContext = createContext();
 const FlightsProvider = ({ children }) => {
   const [flights, setFlights] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [menu, setMenu] = useState("dashboard");
 
   useEffect(() => {
     const fetchFlights = async () => {
@@ -22,7 +23,7 @@ const FlightsProvider = ({ children }) => {
 
 
   return (
-    <FlightsContext.Provider value={{ flights, isLoading }}>
+    <FlightsContext.Provider value={{ flights, menu, isLoading, setMenu }}>
       {children}
     </FlightsContext.Provider>
   );

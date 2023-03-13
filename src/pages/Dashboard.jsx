@@ -1,10 +1,25 @@
 import clsx from "clsx";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSpring, animated, config } from "react-spring";
 import { Airport } from "../components/Airport";
 import Loader from "../components/Loader";
 import { TooltipWithAnimation } from "../components/Tooltip";
 import { FlightsContext } from "../context/Flights";
+import * as Recharts from "recharts";
+import Chart from "../components/BarChart";
+const {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  Legend,
+  Animated,
+} = Recharts;
 
 const AIRPLANE_IMG = {
   "Air Canada":
@@ -19,16 +34,15 @@ const AIRPLANE_IMG = {
     "https://www.theaureview.com/au-content/uploads/2022/01/flair_airlines_new_aircraft_1-e1642455562977.jpg",
   "Porter Airlines":
     "https://s28477.pcdn.co/wp-content/uploads/2019/09/Porter_2-984x554.jpg",
+  "American Airlines":
+    "https://s21.q4cdn.com/616071541/files/images/newsroom/PR_Thumbs/General/social-American-Airlines-generic-18.jpg",
+  "Delta Air Lines":
+    "https://ik.imgkit.net/3vlqs5axxjf/TW/uploadedImages/All_TW_Art/Shutterstock_Art/2017/DeltainVegas.jpg?tr=w-1200%2Cfo-auto",
+  "United Airlines":
+    "https://www.honeywell.com/content/dam/honeywellbt/en/images/content-images/news/article-banners/hon-ABUnited.jpg",
 };
 
-// import * as Recharts from 'recharts';
-// const { LineChart,
-//   Line,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   Tooltip,
-//   ResponsiveContainer, } = Recharts
+const colorPalette = ["#1F2937", "#3B82F6", "#10B981", "#F59E0B", "#EF4444"];
 
 // const map = (value, sMin, sMax, dMin, dMax) => {
 //   return dMin + ((value - sMin) / (sMax - sMin)) * (dMax - dMin);
@@ -95,26 +109,26 @@ const sidebarItems = [
   ],
 ];
 
-// const graphData = [
-//   'Nov',
-//   'Dec',
-//   'Jan',
-//   'Feb',
-//   'Mar',
-//   'Apr',
-//   'May',
-//   'June',
-//   'July',
-// ].map((i) => {
-//   const revenue = 500 + Math.random() * 2000;
-//   const expectedRevenue = Math.max(revenue + (Math.random() - 0.5) * 2000, 0);
-//   return {
-//     name: i,
-//     revenue,
-//     expectedRevenue,
-//     sales: Math.floor(Math.random() * 500),
-//   };
-// });
+const graphData = [
+  "Nov",
+  "Dec",
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "June",
+  "July",
+].map((i) => {
+  const revenue = 500 + Math.random() * 2000;
+  const expectedRevenue = Math.max(revenue + (Math.random() - 0.5) * 2000, 0);
+  return {
+    name: i,
+    revenue,
+    expectedRevenue,
+    sales: Math.floor(Math.random() * 500),
+  };
+});
 
 const Dashboard = ({ flights }) => {
   const [showSidebar, onSetShowSidebar] = useState(false);
@@ -138,6 +152,11 @@ const Dashboard = ({ flights }) => {
 
 function Sidebar({ onSidebarHide, showSidebar }) {
   const [selected, setSelected] = useState("0");
+  const { setMenu } = useContext(FlightsContext);
+  useEffect(() => {
+    if (selected === "0") setMenu("dashboard");
+    else setMenu("overview");
+  }, [selected, setMenu]);
   const { dashOffset, indicatorWidth, precentage } = useSpring({
     dashOffset: 26.015,
     indicatorWidth: 70,
@@ -170,6 +189,7 @@ function Sidebar({ onSidebarHide, showSidebar }) {
           />
         </div>
       </div>
+
       <div className="flex-grow overflow-x-hidden overflow-y-auto flex flex-col">
         <Airport />
         {sidebarItems[0].map((i) => (
@@ -307,6 +327,27 @@ function MenuItem({ item: { id, title, notifications }, onClick, selected }) {
   );
 }
 function Content({ onSidebarHide }) {
+  const { menu, flights } = useContext(FlightsContext);
+
+  const arrivalsByHour = {};
+
+  flights.forEach((entry) => {
+    const scheduledTime = new Date(entry.ScheduledTime);
+    const hour = scheduledTime.getHours();
+    if (!arrivalsByHour[hour]) {
+      arrivalsByHour[hour] = 0;
+    }
+    arrivalsByHour[hour]++;
+  });
+
+  const hourlyArrivalsData = Object.keys(arrivalsByHour).map((hour) => {
+    return {
+      hour: parseInt(hour),
+      arrivals: arrivalsByHour[hour],
+    };
+  });
+
+  console.log(hourlyArrivalsData);
   return (
     <div className="flex w-full">
       <div className="w-full h-screen hidden sm:block sm:w-20 xl:w-60 flex-shrink-0">
@@ -366,11 +407,46 @@ function Content({ onSidebarHide }) {
           TODO: LANDING PAGE AND GRAPHS....
         </div>
 
-        <div className="w-full p-2">
-          <div className="rounded-lg bg-card h-full">
-            <TopFlights />
+        {menu === "dashboard" ? (
+          <div className="w-full p-2">
+            <div className="rounded-lg bg-card h-full">
+              <TopFlights />
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="w-full p-2 inline-block">
+            <div className="rounded-lg bg-card h-full w-full">
+              <BarChart
+                width={800}
+                height={400}
+                data={hourlyArrivalsData}
+                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                className="w-full"
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="hour"
+                  label={{
+                    value: "Hour of day",
+                    position: "insideBottomRight",
+                    offset: -10,
+                  }}
+                />
+                <YAxis
+                  label={{
+                    value: "Total arrivals",
+                    angle: -90,
+                    position: "insideLeft",
+                  }}
+                />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="arrivals" fill="#8884d8" />
+              </BarChart>
+            </div>
+          </div>
+        )}
+
         {/* {employeeData.map(
           ({
             id,
@@ -424,6 +500,30 @@ function Content({ onSidebarHide }) {
     </div>
   );
 }
+
+const customBar = (props) => {
+  const { payload } = props;
+  const radius = 10;
+  return (
+    <Animated
+      animationDuration={500}
+      animationBegin={0}
+      animationEasing="ease"
+      from={{ width: 0, x: props.x + props.width / 2 }}
+      to={{ width: props.width, x: props.x }}
+    >
+      <rect
+        rx={radius}
+        ry={radius}
+        x={props.x}
+        y={props.y}
+        width={props.width}
+        height={props.height}
+        fill={payload.color}
+      />
+    </Animated>
+  );
+};
 
 // function NameCard({
 //   name,
@@ -502,79 +602,79 @@ function Content({ onSidebarHide }) {
 //     </div>
 //   );
 // }
-// function Graph() {
-//   const CustomTooltip = () => (
-//     <div className="rounded-xl overflow-hidden tooltip-head">
-//       <div className="flex items-center justify-between p-2">
-//         <div className="">Revenue</div>
-//         <Icon path="res-react-dash-options" className="w-2 h-2" />
-//       </div>
-//       <div className="tooltip-body text-center p-3">
-//         <div className="text-white font-bold">$1300.50</div>
-//         <div className="">Revenue from 230 sales</div>
-//       </div>
-//     </div>
-//   );
-//   return (
-//     <div className="flex p-4 h-full flex-col">
-//       <div className="">
-//         <div className="flex items-center">
-//           <div className="font-bold text-white">Your Work Summary</div>
-//           <div className="flex-grow" />
+function Graph() {
+  const CustomTooltip = () => (
+    <div className="rounded-xl overflow-hidden tooltip-head">
+      <div className="flex items-center justify-between p-2">
+        <div className="">Revenue</div>
+        <Icon path="res-react-dash-options" className="w-2 h-2" />
+      </div>
+      <div className="tooltip-body text-center p-3">
+        <div className="text-white font-bold">$1300.50</div>
+        <div className="">Revenue from 230 sales</div>
+      </div>
+    </div>
+  );
+  return (
+    <div className="flex p-4 h-full flex-col">
+      <div className="">
+        <div className="flex items-center">
+          <div className="font-bold text-white">Your Work Summary</div>
+          <div className="flex-grow" />
 
-//           <Icon path="res-react-dash-graph-range" className="w-4 h-4" />
-//           <div className="ml-2">Last 9 Months</div>
-//           <div className="ml-6 w-5 h-5 flex justify-center items-center rounded-full icon-background">
-//             ?
-//           </div>
-//         </div>
-//         <div className="font-bold ml-5">Nov - July</div>
-//       </div>
+          <Icon path="res-react-dash-graph-range" className="w-4 h-4" />
+          <div className="ml-2">Last 9 Months</div>
+          <div className="ml-6 w-5 h-5 flex justify-center items-center rounded-full icon-background">
+            ?
+          </div>
+        </div>
+        <div className="font-bold ml-5">Nov - July</div>
+      </div>
 
-//       <div className="flex-grow">
-//         <ResponsiveContainer width="100%" height="100%">
-//           <LineChart width={500} height={300} data={graphData}>
-//             <defs>
-//               <linearGradient id="paint0_linear" x1="0" y1="0" x2="1" y2="0">
-//                 <stop stopColor="#6B8DE3" />
-//                 <stop offset="1" stopColor="#7D1C8D" />
-//               </linearGradient>
-//             </defs>
-//             <CartesianGrid
-//               horizontal={false}
-//               strokeWidth="6"
-//               stroke="#252525"
-//             />
-//             <XAxis
-//               dataKey="name"
-//               axisLine={false}
-//               tickLine={false}
-//               tickMargin={10}
-//             />
-//             <YAxis axisLine={false} tickLine={false} tickMargin={10} />
-
-//             <Line
-//               activeDot={false}
-//               type="monotone"
-//               dataKey="expectedRevenue"
-//               stroke="#242424"
-//               strokeWidth="3"
-//               dot={false}
-//               strokeDasharray="8 8"
-//             />
-//             <Line
-//               type="monotone"
-//               dataKey="revenue"
-//               stroke="url(#paint0_linear)"
-//               strokeWidth="4"
-//               dot={false}
-//             />
-//           </LineChart>
-//         </ResponsiveContainer>
-//       </div>
-//     </div>
-//   );
-// }
+      <div className="flex-grow">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart width="100%" height={300} data={graphData}>
+            <defs>
+              <linearGradient id="paint0_linear" x1="0" y1="0" x2="1" y2="0">
+                <stop stopColor="#6B8DE3" />
+                <stop offset="1" stopColor="#7D1C8D" />
+              </linearGradient>
+            </defs>
+            <CartesianGrid
+              horizontal={false}
+              strokeWidth="6"
+              stroke="#252525"
+            />
+            <XAxis
+              dataKey="name"
+              axisLine={false}
+              tickLine={false}
+              tickMargin={10}
+            />
+            <YAxis axisLine={false} tickLine={false} tickMargin={10} />
+            <Tooltip content={<CustomTooltip />} cursor={false} />
+            <Line
+              activeDot={false}
+              type="monotone"
+              dataKey="expectedRevenue"
+              stroke="#242424"
+              strokeWidth="3"
+              dot={false}
+              strokeDasharray="8 8"
+            />
+            <Line
+              type="monotone"
+              dataKey="revenue"
+              stroke="url(#paint0_linear)"
+              strokeWidth="4"
+              dot={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}
 
 const getStatusButtonStyles = (status) => {
   switch (status) {
