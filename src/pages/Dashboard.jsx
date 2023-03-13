@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { useContext, useState } from "react";
 import { useSpring, animated, config } from "react-spring";
 import { Airport } from "../components/Airport";
+import Loader from "../components/Loader";
 import { FlightsContext } from "../context/flights";
 // import * as Recharts from 'recharts';
 // const { LineChart,
@@ -100,6 +101,7 @@ const sidebarItems = [
 
 const Dashboard = ({ flights }) => {
   const [showSidebar, onSetShowSidebar] = useState(false);
+
   return (
     <div className="flex">
       <Sidebar
@@ -571,7 +573,7 @@ const getStatusButtonStyles = (status) => {
 };
 
 function TopFlights() {
-  const { flights } = useContext(FlightsContext);
+  const { flights, isLoading } = useContext(FlightsContext);
   const buttonAnimation = useSpring({
     from: { boxShadow: "0 0 0px rgba(0,0,0,0)" },
     to: { boxShadow: "0 0 10px rgba(0,0,0,0.5)" },
@@ -580,70 +582,71 @@ function TopFlights() {
 
   return (
     <div className="flex flex-col h-full rounded-lg p-4">
-  <div className="flex justify-between items-center text-white font-bold pb-2">
-    <div>Status</div>
-    <Icon path="res-react-dash-plus" className="w-5 h-5" />
-  </div>
-  <div className="flex flex-wrap items-center font-bold text-white">
-    <div className="w-full sm:w-1/6">Flight #</div>
-    <div className="w-full sm:w-1/6">Airline</div>
-    <div className="w-full sm:w-1/6">Airport</div>
-    <div className="w-full sm:w-1/6">Status</div>
-    <div className="w-full sm:w-1/6">Scheduled Time</div>
-    <div className="w-full sm:w-1/6">Estimated Time</div>
-  </div>
-  {flights.map(
-    ({
-      Id,
-      ScheduledTime,
-      EstimatedTime,
-      Airline,
-      Airport,
-      FlightNumber,
-      YycStatus,
-    }) => {
-      const scheduled = new Date(ScheduledTime).toLocaleTimeString(
-        "en-US",
-        { hour12: false, hour: "2-digit", minute: "2-digit" }
-      );
-      const estimated = new Date(EstimatedTime).toLocaleTimeString(
-        "en-US",
-        { hour12: false, hour: "2-digit", minute: "2-digit" }
-      );
-      return (
-        <div
-          className="flex flex-wrap items-center mt-3 border-b-2 border-gray-700 pb-2"
-          key={Id}
-        >
-          <div className="w-full sm:w-1/6">{FlightNumber}</div>
-          <div className="w-full sm:w-1/6">{Airline.Name}</div>
-          <div className="w-full sm:w-1/6">{Airport.Name}</div>
-          <div className="w-full sm:w-1/6">
-           {YycStatus.PrimaryStatus.ShortEnglishText &&  <animated.button
-              className={`inline-block rounded-md text-white font-semibold py-2 px-4 my-2 sm:my-0 transition-colors duration-300 ${getStatusButtonStyles(
-                YycStatus.PrimaryStatus.ShortEnglishText
-              )}`}
-              style={buttonAnimation}
+      <div className="flex justify-between items-center text-white font-bold pb-2">
+        <div>Status</div>
+        <Icon path="res-react-dash-plus" className="w-5 h-5" />
+      </div>
+      <div className="flex flex-wrap items-center font-bold text-white">
+        <div className="w-full sm:w-1/6">Flight #</div>
+        <div className="w-full sm:w-1/6">Airline</div>
+        <div className="w-full sm:w-1/6">Airport</div>
+        <div className="w-full sm:w-1/6">Status</div>
+        <div className="w-full sm:w-1/6">Scheduled Time</div>
+        <div className="w-full sm:w-1/6">Estimated Time</div>
+      </div>
+      {isLoading? <Loader/> : flights.map(
+        ({
+          Id,
+          ScheduledTime,
+          EstimatedTime,
+          Airline,
+          Airport,
+          FlightNumber,
+          YycStatus,
+        }) => {
+          const scheduled = new Date(ScheduledTime).toLocaleTimeString(
+            "en-US",
+            { hour12: false, hour: "2-digit", minute: "2-digit" }
+          );
+          const estimated = new Date(EstimatedTime).toLocaleTimeString(
+            "en-US",
+            { hour12: false, hour: "2-digit", minute: "2-digit" }
+          );
+          return (
+            <div
+              className="flex flex-wrap items-center mt-3 border-b-2 border-gray-700 pb-2"
+              key={Id}
             >
-              {YycStatus.PrimaryStatus.ShortEnglishText}
-            </animated.button>}
-          </div>
-          <div className="w-full sm:w-1/6">{scheduled}</div>
-          <div className="w-full sm:w-1/6">{estimated}</div>
+              <div className="w-full sm:w-1/6">{FlightNumber}</div>
+              <div className="w-full sm:w-1/6">{Airline.Name}</div>
+              <div className="w-full sm:w-1/6">{Airport.Name}</div>
+              <div className="w-full sm:w-1/6">
+                {YycStatus.PrimaryStatus.ShortEnglishText && (
+                  <animated.button
+                    className={`inline-block rounded-md text-white font-semibold py-2 px-4 my-2 sm:my-0 transition-colors duration-300 ${getStatusButtonStyles(
+                      YycStatus.PrimaryStatus.ShortEnglishText
+                    )}`}
+                    style={buttonAnimation}
+                  >
+                    {YycStatus.PrimaryStatus.ShortEnglishText}
+                  </animated.button>
+                )}
+              </div>
+              <div className="w-full sm:w-1/6">{scheduled}</div>
+              <div className="w-full sm:w-1/6">{estimated}</div>
+            </div>
+          );
+        }
+      )}
+      <div className="flex-grow" />
+      <div className="flex justify-center">
+        <div className="text-center">
+          <button className="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-500">
+            Check All
+          </button>
         </div>
-      );
-    }
-  )}
-  <div className="flex-grow" />
-  <div className="flex justify-center">
-    <div className="text-center">
-      <button className="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-500">
-        Check All
-      </button>
+      </div>
     </div>
-  </div>
-</div>
-
   );
 }
 
