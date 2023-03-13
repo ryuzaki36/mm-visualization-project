@@ -1,10 +1,13 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import FlightsProvider from "./context/flights";
 import Dashboard from "./pages/Dashboard";
-import { Landing } from "./pages/Landing";
-
 
 function App() {
   return (
-  <Dashboard />
+    <FlightsProvider>
+      <Dashboard />
+    </FlightsProvider>
   );
 }
 

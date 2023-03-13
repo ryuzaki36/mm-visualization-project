@@ -1,6 +1,8 @@
 import clsx from "clsx";
-import {useState} from 'react';
-import { useSpring, animated, config} from 'react-spring';
+import { useContext, useState } from "react";
+import { useSpring, animated, config } from "react-spring";
+import { Airport } from "../components/Airport";
+import { FlightsContext } from "../context/flights";
 // import * as Recharts from 'recharts';
 // const { LineChart,
 //   Line,
@@ -63,8 +65,8 @@ import { useSpring, animated, config} from 'react-spring';
 
 const sidebarItems = [
   [
-    { id: '0', title: 'Dashboard', notifications: false },
-    { id: '1', title: 'Overview', notifications: false },
+    { id: "0", title: "Dashboard", notifications: false },
+    { id: "1", title: "Overview", notifications: false },
     // { id: '2', title: 'Chat', notifications: 6 },
     // { id: '3', title: 'Team', notifications: false },
   ],
@@ -96,7 +98,7 @@ const sidebarItems = [
 //   };
 // });
 
-const Dashboard = () => {
+const Dashboard = ({ flights }) => {
   const [showSidebar, onSetShowSidebar] = useState(false);
   return (
     <div className="flex">
@@ -113,10 +115,10 @@ const Dashboard = () => {
       />
     </div>
   );
-}
+};
 
 function Sidebar({ onSidebarHide, showSidebar }) {
-  const [selected, setSelected] = useState('0');
+  const [selected, setSelected] = useState("0");
   const { dashOffset, indicatorWidth, precentage } = useSpring({
     dashOffset: 26.015,
     indicatorWidth: 70,
@@ -127,15 +129,19 @@ function Sidebar({ onSidebarHide, showSidebar }) {
   return (
     <div
       className={clsx(
-        'fixed inset-y-0 left-0 bg-card w-full sm:w-20 xl:w-60 sm:flex flex-col z-10',
-        showSidebar ? 'flex' : 'hidden',
+        "fixed inset-y-0 left-0 bg-card w-full sm:w-20 xl:w-60 sm:flex flex-col z-10",
+        showSidebar ? "flex" : "hidden"
       )}
     >
       <div className="flex-shrink-0 overflow-hidden p-2">
         <div className="flex items-center h-full sm:justify-center xl:justify-start p-2 sidebar-separator-top">
-          <img alt="airplane" src="https://www.pngplay.com/wp-content/uploads/6/Flying-Blue-Aircraft-Transparent-PNG.png" className="h-[2.7rem]" />
+          <img
+            alt="airplane"
+            src="https://www.pngplay.com/wp-content/uploads/6/Flying-Blue-Aircraft-Transparent-PNG.png"
+            className="h-[2.7rem]"
+          />
           <div className="block sm:hidden xl:block ml-2 font-bold text-xl text-white">
-          AeroTrack
+            AeroTrack
           </div>
           <div className="flex-grow sm:hidden xl:block" />
           <IconButton
@@ -146,20 +152,7 @@ function Sidebar({ onSidebarHide, showSidebar }) {
         </div>
       </div>
       <div className="flex-grow overflow-x-hidden overflow-y-auto flex flex-col">
-        <div className="w-full p-3 h-24 sm:h-20 xl:h-24 hidden sm:block flex-shrink-0">
-          <div className="bg-sidebar-card-top rounded-xl w-full h-full flex items-center justify-start sm:justify-center xl:justify-start px-3 sm:px-0 xl:px-3">
-            <Icon path="res-react-dash-sidebar-card" className="w-9 h-9 " />
-            <div className="block sm:hidden xl:block ml-3">
-              <div className="text-sm font-bold text-white">Flight Data</div>
-              <div className="text-sm">LAX Airport</div>
-            </div>
-            <div className="block sm:hidden xl:block flex-grow" />
-            <Icon
-              path="res-react-dash-sidebar-card-select"
-              className="block sm:hidden xl:block w-5 h-5"
-            />
-          </div>
-        </div>
+        <Airport />
         {sidebarItems[0].map((i) => (
           <MenuItem
             key={i.id}
@@ -184,11 +177,14 @@ function Sidebar({ onSidebarHide, showSidebar }) {
           <div
             className="rounded-xl w-full h-full px-3 sm:px-0 xl:px-3 overflow-hidden"
             style={{
-              backgroundImage: "url('https://assets.codepen.io/3685267/res-react-dash-usage-card.svg')",
+              backgroundImage:
+                "url('https://assets.codepen.io/3685267/res-react-dash-usage-card.svg')",
             }}
           >
             <div className="block sm:hidden xl:block pt-3">
-              <div className="font-bold text-gray-300 text-sm">Flights Today</div>
+              <div className="font-bold text-gray-300 text-sm">
+                Flights Today
+              </div>
               <div className="text-gray-500 text-xs">
                 This results are based on flight API
               </div>
@@ -253,7 +249,11 @@ function Sidebar({ onSidebarHide, showSidebar }) {
 
       <div className="flex-shrink-0 overflow-hidden p-2">
         <div className="flex items-center h-full sm:justify-center xl:justify-start p-2 sidebar-separator-bottom">
-          <img src="https://cdn.discordapp.com/attachments/816676404879556621/1084561311498772520/Screenshot_from_2023-03-13_01-23-19.png" alt="yugesh" className="w-10 h-10 rounded-full" />
+          <img
+            src="https://cdn.discordapp.com/attachments/816676404879556621/1084561311498772520/Screenshot_from_2023-03-13_01-23-19.png"
+            alt="yugesh"
+            className="w-10 h-10 rounded-full"
+          />
           <div className="block sm:hidden xl:block ml-2 font-bold ">
             Yugesh Bantawa
           </div>
@@ -271,8 +271,8 @@ function MenuItem({ item: { id, title, notifications }, onClick, selected }) {
   return (
     <div
       className={clsx(
-        'w-full mt-6 flex items-center px-3 sm:px-0 xl:px-3 justify-start sm:justify-center xl:justify-start sm:mt-6 xl:mt-3 cursor-pointer',
-        selected === id ? 'sidebar-item-selected' : 'sidebar-item',
+        "w-full mt-6 flex items-center px-3 sm:px-0 xl:px-3 justify-start sm:justify-center xl:justify-start sm:mt-6 xl:mt-3 cursor-pointer",
+        selected === id ? "sidebar-item-selected" : "sidebar-item"
       )}
       onClick={() => onClick(id)}
     >
@@ -298,13 +298,13 @@ function Content({ onSidebarHide }) {
           <div className="sm:flex-grow flex justify-between">
             <div className="">
               <div className="flex items-center">
-                <div className="text-3xl font-bold text-white">Hello Yugesh</div>
+                <div className="text-3xl font-bold text-white">
+                  Hello Yugesh
+                </div>
                 <div className="flex items-center p-2 bg-card ml-2 rounded-xl">
                   <Icon path="res-react-dash-premium-star" />
 
-                  <div className="ml-2 font-bold text-premium-yellow">
-                    PRO
-                  </div>
+                  <div className="ml-2 font-bold text-premium-yellow">PRO</div>
                 </div>
               </div>
               <div className="flex items-center">
@@ -312,7 +312,12 @@ function Content({ onSidebarHide }) {
                   path="res-react-dash-date-indicator"
                   className="w-3 h-3"
                 />
-                <div className="ml-2">{new Date().toLocaleString('default', { month: 'long', day: 'numeric' })}</div>
+                <div className="ml-2">
+                  {new Date().toLocaleString("default", {
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </div>
               </div>
             </div>
             <IconButton
@@ -339,8 +344,14 @@ function Content({ onSidebarHide }) {
         </div>
 
         <div className="ml-2 font-bold text-premium-yellow">
-                    TODO: LANDING PAGE AND GRAPHS....
-                  </div>
+          TODO: LANDING PAGE AND GRAPHS....
+        </div>
+
+        <div className="w-full p-2">
+          <div className="rounded-lg bg-card h-full">
+            <TopFlights />
+          </div>
+        </div>
         {/* {employeeData.map(
           ({
             id,
@@ -546,38 +557,90 @@ function Content({ onSidebarHide }) {
 //   );
 // }
 
-// function TopCountries() {
-//   return (
-//     <div className="flex p-4 flex-col h-full">
-//       <div className="flex justify-between items-center">
-//         <div className="text-white font-bold">Top Countries</div>
-//         <Icon path="res-react-dash-plus" className="w-5 h-5" />
-//       </div>
-//       <div className="">favourites</div>
-//       {Countrydata.map(({ name, rise, value, id }) => (
-//         <div className="flex items-center mt-3" key={id}>
-//           <div className="">{id}</div>
+const getStatusButtonStyles = (status) => {
+  switch (status) {
+    case "Arrived":
+      return "bg-green-500 hover:bg-green-600";
+    case "Departed":
+      return "bg-blue-500 hover:bg-blue-600";
+    case "Delayed":
+      return "bg-yellow-500 hover:bg-yellow-600";
+    default:
+      return "bg-gray-500 hover:bg-gray-600";
+  }
+};
 
-//           <Image path={`res-react-dash-flag-${id}`} className="ml-2 w-6 h-6" />
-//           <div className="ml-2">{name}</div>
-//           <div className="flex-grow" />
-//           <div className="">{`$${value.toLocaleString()}`}</div>
-//           <Icon
-//             path={
-//               rise ? 'res-react-dash-country-up' : 'res-react-dash-country-down'
-//             }
-//             className="w-4 h-4 mx-3"
-//           />
-//           <Icon path="res-react-dash-options" className="w-2 h-2" />
-//         </div>
-//       ))}
-//       <div className="flex-grow" />
-//       <div className="flex justify-center">
-//         <div className="">Check All</div>
-//       </div>
-//     </div>
-//   );
-// }
+function TopFlights() {
+  const { flights } = useContext(FlightsContext);
+  const buttonAnimation = useSpring({
+    from: { boxShadow: "0 0 0px rgba(0,0,0,0)" },
+    to: { boxShadow: "0 0 10px rgba(0,0,0,0.5)" },
+    config: { duration: 500 },
+  });
+
+  return (
+    <div className="flex p-4 flex-col h-full rounded-lg">
+      <div className="flex justify-between items-center">
+        <div className="text-white font-bold pb-2">Status</div>
+        <Icon path="res-react-dash-plus" className="w-5 h-5" />
+      </div>
+      <div className="flex items-center font-bold text-white">
+        <div className="w-1/6">Flight #</div>
+        <div className="w-1/6">Airline</div>
+        <div className="w-1/6">Airport</div>
+        <div className="w-1/6">Status</div>
+        <div className="w-1/6">Scheduled Time</div>
+        <div className="w-1/6">Estimated Time</div>
+      </div>
+      {flights.map(
+        ({
+          Id,
+          ScheduledTime,
+          EstimatedTime,
+          Airline,
+          Airport,
+          FlightNumber,
+          YycStatus,
+        }) => {
+          const scheduled = new Date(ScheduledTime).toLocaleTimeString(
+            "en-US",
+            { hour12: false, hour: "2-digit", minute: "2-digit" }
+          );
+          const estimated = new Date(EstimatedTime).toLocaleTimeString(
+            "en-US",
+            { hour12: false, hour: "2-digit", minute: "2-digit" }
+          );
+          return (
+            <div
+              className="flex items-center mt-3 border-b-2 border-gray-700 pb-2"
+              key={Id}
+            >
+              <div className="w-1/6">{FlightNumber}</div>
+              <div className="w-1/6">{Airline.Name}</div>
+              <div className="w-1/6">{Airport.Name}</div>
+              <animated.button
+                className={`rounded-md w-1/6 text-white font-semibold py-2 px-4 mx-20 transition-colors duration-300 ${getStatusButtonStyles(
+                  YycStatus.PrimaryStatus.ShortEnglishText
+                )}`}
+                style={buttonAnimation}
+              >
+                {YycStatus.PrimaryStatus.ShortEnglishText}
+              </animated.button>{" "}
+              <div className="w-1/6">{scheduled}</div>
+              <div className="w-1/6">{estimated}</div>
+            </div>
+          );
+        }
+      )}
+      <div className="flex-grow" />
+      <div className="flex justify-center">
+        <button className="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-500">
+          Check All
+        </button>
+      </div>
+    </div>
+  );
+}
 
 // function Segmentation() {
 //   return (
@@ -951,7 +1014,7 @@ function SidebarIcons({ id }) {
   );
 }
 
-function Icon({ path = 'options', className = 'w-4 h-4' }) {
+export function Icon({ path = "options", className = "w-4 h-4" }) {
   return (
     <img
       src={`https://assets.codepen.io/3685267/${path}.svg`}
@@ -963,8 +1026,8 @@ function Icon({ path = 'options', className = 'w-4 h-4' }) {
 
 function IconButton({
   onClick = () => {},
-  icon = 'options',
-  className = 'w-4 h-4',
+  icon = "options",
+  className = "w-4 h-4",
 }) {
   return (
     <button onClick={onClick} type="button" className={className}>
