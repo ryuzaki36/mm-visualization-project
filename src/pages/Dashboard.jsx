@@ -49,38 +49,6 @@ const colorPalette = ["#1F2937", "#3B82F6", "#10B981", "#F59E0B", "#EF4444"];
 // const pi = Math.PI;
 // const tau = 2 * pi;
 
-// const employeeData = [
-//   {
-//     id: 1,
-//     name: 'Esther Howard',
-//     position: "Sale's manager USA",
-//     transactions: 3490,
-//     rise: true,
-//     tasksCompleted: 3,
-//     imgId: 0,
-//   },
-
-//   {
-//     id: 2,
-//     name: 'Eleanor Pena',
-//     position: "Sale's manager Europe",
-//     transactions: 590,
-//     rise: false,
-//     tasksCompleted: 5,
-//     imgId: 2,
-//   },
-
-//   {
-//     id: 3,
-//     name: 'Robert Fox',
-//     position: "Sale's manager Asia",
-//     transactions: 2600,
-//     rise: true,
-//     tasksCompleted: 1,
-//     imgId: 3,
-//   },
-// ];
-
 // const Countrydata = [
 //   { name: 'USA', rise: true, value: 21942.83, id: 1 },
 //   { name: 'Ireland', rise: false, value: 19710.0, id: 2 },
@@ -97,7 +65,7 @@ const colorPalette = ["#1F2937", "#3B82F6", "#10B981", "#F59E0B", "#EF4444"];
 const sidebarItems = [
   [
     { id: "0", title: "Dashboard", notifications: false },
-    { id: "1", title: "Overview", notifications: false },
+    { id: "1", title: "Analytics", notifications: false },
     // { id: '2', title: 'Chat', notifications: 6 },
     // { id: '3', title: 'Team', notifications: false },
   ],
@@ -329,16 +297,35 @@ function Content({ onSidebarHide }) {
   const { menu, flights } = useContext(FlightsContext);
 
   const arrivalsByHour = {};
+  const departuresByHour = {};
+  let totalArrivals = 0;
+  let totalDepartures = 0;
 
   flights.forEach((entry) => {
     const scheduledTime = new Date(entry.ScheduledTime);
-    const hour = scheduledTime.getHours();
-    if (!arrivalsByHour[hour]) {
-      arrivalsByHour[hour] = 0;
+    if (entry.Leg === "A") {
+      const hour = scheduledTime.getHours();
+      if (!arrivalsByHour[hour]) {
+        arrivalsByHour[hour] = 0;
+      }
+      arrivalsByHour[hour]++;
+      totalArrivals += 1;
+    } else {
+      const hour = scheduledTime.getHours();
+      if (!departuresByHour[hour]) {
+        departuresByHour[hour] = 0;
+      }
+      departuresByHour[hour]++;
+      totalDepartures += 1;
     }
-    arrivalsByHour[hour]++;
   });
 
+  const hourlyDeparturesData = Object.keys(departuresByHour).map((hour) => {
+    return {
+      hour: parseInt(hour),
+      arrivals: departuresByHour[hour],
+    };
+  });
   const hourlyArrivalsData = Object.keys(arrivalsByHour).map((hour) => {
     return {
       hour: parseInt(hour),
@@ -346,7 +333,47 @@ function Content({ onSidebarHide }) {
     };
   });
 
-  console.log(hourlyArrivalsData);
+  const flightData = [
+    {
+      id: 1,
+      name: "Total Flights",
+      position: new Date().toLocaleString("default", {
+        month: "long",
+        day: "numeric",
+      }),
+      transactions: flights.length,
+      rise: true,
+      tasksCompleted: flights.length,
+      imgId:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9fW0Cb3YIREQDznkbRIvMizpZ_vJdy1ah_K5DsGei5sYK2TwXIKPWS0zHovvZMIDQw-Q&usqp=CAU",
+    },
+    {
+      id: 2,
+      name: "Total Arrivals",
+      position: new Date().toLocaleString("default", {
+        month: "long",
+        day: "numeric",
+      }),
+      transactions: totalArrivals,
+      rise: true,
+      tasksCompleted: totalArrivals,
+      imgId:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSH50YSJg1Qw7n6kBCXbgjPBbyYoBdaEbdawg&usqp=CAU",
+    },
+    {
+      id: 3,
+      name: "Total Departures",
+      position: new Date().toLocaleString("default", {
+        month: "long",
+        day: "numeric",
+      }),
+      transactions: totalDepartures,
+      rise: true,
+      tasksCompleted: totalDepartures,
+      imgId:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm6MOd3qre7gln8CDgwy034IzEeD-9uvuFhg&usqp=CAU",
+    },
+  ];
   return (
     <div className="flex w-full">
       <div className="w-full h-screen hidden sm:block sm:w-20 xl:w-60 flex-shrink-0">
@@ -402,9 +429,9 @@ function Content({ onSidebarHide }) {
           </div>
         </div>
 
-        <div className="ml-2 font-bold text-premium-yellow">
+        {/* <div className="ml-2 font-bold text-premium-yellow">
           TODO: LANDING PAGE AND GRAPHS....
-        </div>
+        </div> */}
 
         {menu === "dashboard" ? (
           <div className="w-full p-2">
@@ -413,61 +440,64 @@ function Content({ onSidebarHide }) {
             </div>
           </div>
         ) : (
-          <div className="w-full p-2 inline-block">
-            <div className="rounded-lg bg-card h-full w-full">
-              <BarChart
-                width={800}
-                height={400}
-                data={hourlyArrivalsData}
-                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                className="w-full"
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="hour"
-                  label={{
-                    value: "Hour of day",
-                    position: "insideBottomRight",
-                    offset: -10,
-                  }}
+          <>
+            {flightData.map(
+              ({
+                id,
+                name,
+                position,
+                transactions,
+                rise,
+                tasksCompleted,
+                imgId,
+              }) => (
+                <FlightCard
+                  key={id}
+                  id={id}
+                  name={name}
+                  position={position}
+                  transactionAmount={transactions}
+                  rise={rise}
+                  tasksCompleted={tasksCompleted}
+                  imgId={imgId}
                 />
-                <YAxis
-                  label={{
-                    value: "Total arrivals",
-                    angle: -90,
-                    position: "insideLeft",
-                  }}
-                />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="arrivals" fill="#8884d8" />
-              </BarChart>
+              )
+            )}
+            <div className="w-full p-2 inline-block">
+              <div className="rounded-lg bg-card h-full w-full">
+                <BarChart
+                  width={800}
+                  height={400}
+                  data={hourlyArrivalsData}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  className="w-full"
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="hour"
+                    label={{
+                      value: "Hour of day",
+                      position: "insideBottomRight",
+                      offset: -10,
+                    }}
+                  />
+                  <YAxis
+                    label={{
+                      value: "Total arrivals",
+                      angle: -90,
+                      position: "insideLeft",
+                    }}
+                  />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="arrivals" fill="#22c55E" />
+                </BarChart>
+              </div>
             </div>
-          </div>
+          </>
         )}
 
-        {/* {employeeData.map(
-          ({
-            id,
-            name,
-            position,
-            transactions,
-            rise,
-            tasksCompleted,
-            imgId,
-          }) => (
-            <NameCard
-              key={id}
-              id={id}
-              name={name}
-              position={position}
-              transactionAmount={transactions}
-              rise={rise}
-              tasksCompleted={tasksCompleted}
-              imgId={imgId}
-            />
-          ),
-        )}
+        {/* 
 
         <div className="w-full p-2 lg:w-2/3">
           <div className="rounded-lg bg-card sm:h-80 h-60">
@@ -500,84 +530,84 @@ function Content({ onSidebarHide }) {
   );
 }
 
+function FlightCard({
+  name,
+  position,
+  transactionAmount,
+  rise,
+  tasksCompleted,
+  imgId,
+}) {
+  const { transactions, barPlayhead } = useSpring({
+    transactions: transactionAmount,
+    barPlayhead: 1,
+    from: { transactions: 0, barPlayhead: 0 },
+  });
+  return (
+    <div className="w-full p-2 lg:w-1/3">
+      <div className="rounded-lg bg-card flex justify-between p-3 h-32">
+        <div className="">
+          <div className="flex items-center">
+            <Image path={imgId} className="w-10 h-10" />
+            <div className="ml-2">
+              <div className="flex items-center">
+                <div className="mr-2 font-bold text-white">{name}</div>
+                <Icon path="res-react-dash-tick" />
+              </div>
+              <div className="text-sm ">{position}</div>
+            </div>
+          </div>
 
-// function NameCard({
-//   name,
-//   position,
-//   transactionAmount,
-//   rise,
-//   tasksCompleted,
-//   imgId,
-// }) {
-//   const { transactions, barPlayhead } = useSpring({
-//     transactions: transactionAmount,
-//     barPlayhead: 1,
-//     from: { transactions: 0, barPlayhead: 0 },
-//   });
-//   return (
-//     <div className="w-full p-2 lg:w-1/3">
-//       <div className="rounded-lg bg-card flex justify-between p-3 h-32">
-//         <div className="">
-//           <div className="flex items-center">
-//             <Image path={`mock_faces_${imgId}`} className="w-10 h-10" />
-//             <div className="ml-2">
-//               <div className="flex items-center">
-//                 <div className="mr-2 font-bold text-white">{name}</div>
-//                 <Icon path="res-react-dash-tick" />
-//               </div>
-//               <div className="text-sm ">{position}</div>
-//             </div>
-//           </div>
+          <div className="text-sm  mt-2">{`Last 24 hours`}</div>
+          <svg
+            className="w-44 mt-3"
+            height="6"
+            viewBox="0 0 200 6"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="200" height="6" rx="3" fill="#2D2D2D" />
+            <animated.rect
+              width={barPlayhead.interpolate(
+                (i) => i * (tasksCompleted / 1500) * 200
+              )}
+              height="6"
+              rx="3"
+              fill="url(#paint0_linear)"
+            />
+            <rect x="38" width="2" height="6" fill="#171717" />
+            <rect x="78" width="2" height="6" fill="#171717" />
+            <rect x="118" width="2" height="6" fill="#171717" />
+            <rect x="158" width="2" height="6" fill="#171717" />
+            <defs>
+              <linearGradient id="paint0_linear" x1="0" y1="0" x2="1" y2="0">
+                <stop stopColor="#8E76EF" />
+                <stop offset="1" stopColor="#3912D2" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div className="flex flex-col items-center">
+          <Icon
+            path={rise ? "res-react-dash-bull" : "res-react-dash-bear"}
+            className="w-8 h-8"
+          />
+          <animated.div
+            className={clsx(
+              rise ? "text-green-500" : "text-red-500",
+              "font-bold",
+              "text-lg"
+            )}
+          >
+            {transactions.interpolate((i) => `${i.toFixed(0)}`)}
+          </animated.div>
+          <div className="text-sm ">flights</div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-//           <div className="text-sm  mt-2">{`${tasksCompleted} from 5 tasks completed`}</div>
-//           <svg
-//             className="w-44 mt-3"
-//             height="6"
-//             viewBox="0 0 200 6"
-//             fill="none"
-//             xmlns="http://www.w3.org/2000/svg"
-//           >
-//             <rect width="200" height="6" rx="3" fill="#2D2D2D" />
-//             <animated.rect
-//               width={barPlayhead.interpolate(
-//                 (i) => i * (tasksCompleted / 5) * 200,
-//               )}
-//               height="6"
-//               rx="3"
-//               fill="url(#paint0_linear)"
-//             />
-//             <rect x="38" width="2" height="6" fill="#171717" />
-//             <rect x="78" width="2" height="6" fill="#171717" />
-//             <rect x="118" width="2" height="6" fill="#171717" />
-//             <rect x="158" width="2" height="6" fill="#171717" />
-//             <defs>
-//               <linearGradient id="paint0_linear" x1="0" y1="0" x2="1" y2="0">
-//                 <stop stopColor="#8E76EF" />
-//                 <stop offset="1" stopColor="#3912D2" />
-//               </linearGradient>
-//             </defs>
-//           </svg>
-//         </div>
-//         <div className="flex flex-col items-center">
-//           <Icon
-//             path={rise ? 'res-react-dash-bull' : 'res-react-dash-bear'}
-//             className="w-8 h-8"
-//           />
-//           <animated.div
-//             className={clsx(
-//               rise ? 'text-green-500' : 'text-red-500',
-//               'font-bold',
-//               'text-lg',
-//             )}
-//           >
-//             {transactions.interpolate((i) => `$${i.toFixed(2)}`)}
-//           </animated.div>
-//           <div className="text-sm ">Last 6 month</div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
 function Graph() {
   const CustomTooltip = () => (
     <div className="rounded-xl overflow-hidden tooltip-head">
@@ -1149,14 +1179,8 @@ function IconButton({
   );
 }
 
-// function Image({ path = '1', className = 'w-4 h-4' }) {
-//   return (
-//     <img
-//       src={`https://assets.codepen.io/3685267/${path}.jpg`}
-//       alt=""
-//       className={clsx(className, 'rounded-full')}
-//     />
-//   );
-// }
+function Image({ path = "1", className = "w-4 h-4" }) {
+  return <img src={path} alt="" className={clsx(className, "rounded-full")} />;
+}
 
 export default Dashboard;
