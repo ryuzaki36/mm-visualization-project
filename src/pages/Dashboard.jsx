@@ -294,14 +294,14 @@ function MenuItem({ item: { id, title, notifications }, onClick, selected }) {
   );
 }
 function Content({ onSidebarHide }) {
-  const { menu, flights } = useContext(FlightsContext);
+  const { menu, flights, flightsByDay } = useContext(FlightsContext);
 
   const arrivalsByHour = {};
   const departuresByHour = {};
   let totalArrivals = 0;
   let totalDepartures = 0;
 
-  flights.forEach((entry) => {
+  flightsByDay?.today?.forEach((entry) => {
     const scheduledTime = new Date(entry.ScheduledTime);
     if (entry.Leg === "A") {
       const hour = scheduledTime.getHours();
@@ -341,9 +341,9 @@ function Content({ onSidebarHide }) {
         month: "long",
         day: "numeric",
       }),
-      transactions: flights.length,
+      transactions: flightsByDay?.today?.length,
       rise: true,
-      tasksCompleted: flights.length,
+      tasksCompleted: flightsByDay?.today?.length,
       imgId:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9fW0Cb3YIREQDznkbRIvMizpZ_vJdy1ah_K5DsGei5sYK2TwXIKPWS0zHovvZMIDQw-Q&usqp=CAU",
     },
@@ -543,6 +543,8 @@ function FlightCard({
     barPlayhead: 1,
     from: { transactions: 0, barPlayhead: 0 },
   });
+  const { flights } = useContext(FlightsContext);
+
   return (
     <div className="w-full p-2 lg:w-1/3">
       <div className="rounded-lg bg-card flex justify-between p-3 h-32">
@@ -558,7 +560,7 @@ function FlightCard({
             </div>
           </div>
 
-          <div className="text-sm  mt-2">{`Last 24 hours`}</div>
+          <div className="text-sm  mt-2">{`Today`}</div>
           <svg
             className="w-44 mt-3"
             height="6"
@@ -569,7 +571,7 @@ function FlightCard({
             <rect width="200" height="6" rx="3" fill="#2D2D2D" />
             <animated.rect
               width={barPlayhead.interpolate(
-                (i) => i * (tasksCompleted / 1500) * 200
+                (i) => i * (tasksCompleted / flights.length) * 200
               )}
               height="6"
               rx="3"
@@ -696,7 +698,7 @@ const getStatusButtonStyles = (status) => {
 };
 
 function TopFlights() {
-  const { flights, isLoading } = useContext(FlightsContext);
+  const { flightsByDay, isLoading } = useContext(FlightsContext);
   const buttonAnimation = useSpring({
     from: { boxShadow: "0 0 0px rgba(0,0,0,0)" },
     to: { boxShadow: "0 0 10px rgba(0,0,0,0.5)" },
@@ -720,7 +722,7 @@ function TopFlights() {
       {isLoading ? (
         <Loader />
       ) : (
-        flights.map(
+        flightsByDay?.today?.map(
           ({
             Id,
             ScheduledTime,
