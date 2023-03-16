@@ -467,7 +467,7 @@ function Content({ onSidebarHide }) {
               )
             )}
             <div className="w-full p-2 flex flex-wrap">
-              <div className="rounded-lg bg-card h-full w-full lg:w-2/3 p-4">
+              <div className="rounded-lg bg-card w-full lg:w-2/3 p-4">
                 <div className="flex items-center">
                   <div className="font-bold text-white">Flight Summary</div>
                   <div className="flex-grow" />
@@ -509,7 +509,7 @@ function Content({ onSidebarHide }) {
                   </BarChart>
                 </ResponsiveContainer>
               </div>
-              <div className="rounded-lg bg-card h-full w-full lg:w-1/3 p-4">
+              <div className="rounded-lg bg-card w-full lg:w-1/3 p-4">
                 <FlightsByAirlineChart></FlightsByAirlineChart>
               </div>
             </div>
