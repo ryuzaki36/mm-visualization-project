@@ -5,8 +5,11 @@ import { Airport } from "../components/Airport";
 import Loader from "../components/Loader";
 import { TooltipWithAnimation } from "../components/Tooltip";
 import { FlightsContext } from "../context/Flights";
+import { utcToZonedTime } from "date-fns-tz";
 import * as Recharts from "recharts";
 import Chart from "../components/BarChart";
+import FlightsByAirlineChart from "../components/PieChart";
+import { MapChart } from "../components/MapChart";
 const {
   LineChart,
   Line,
@@ -463,36 +466,56 @@ function Content({ onSidebarHide }) {
                 />
               )
             )}
-            <div className="w-full p-2 inline-block">
-              <div className="rounded-lg bg-card h-full w-full">
-                <BarChart
-                  width={800}
-                  height={400}
-                  data={hourlyArrivalsData}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                  className="w-full"
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis
-                    dataKey="hour"
-                    label={{
-                      value: "Hour of day",
-                      position: "insideBottomRight",
-                      offset: -10,
-                    }}
+            <div className="w-full p-2 flex flex-wrap">
+              <div className="rounded-lg bg-card h-full w-full lg:w-2/3 p-4">
+                <div className="flex items-center">
+                  <div className="font-bold text-white">Flight Summary</div>
+                  <div className="flex-grow" />
+                  <img
+                    src="https://assets.codepen.io/3685267/res-react-dash-graph-range.svg"
+                    alt=""
+                    className="w-4 h-4"
                   />
-                  <YAxis
-                    label={{
-                      value: "Total arrivals",
-                      angle: -90,
-                      position: "insideLeft",
-                    }}
-                  />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="arrivals" fill="#22c55E" />
-                </BarChart>
+                  <div className="ml-2">Last 24 hours</div>
+                  <div className="ml-6 w-5 h-5 flex justify-center items-center rounded-full icon-background">
+                    ?
+                  </div>
+                </div>
+                <ResponsiveContainer width="100%" height={400}>
+                  <BarChart
+                    data={hourlyArrivalsData}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    className="w-full"
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="hour"
+                      label={{
+                        value: "Hour of day",
+                        position: "insideBottomRight",
+                        offset: -10,
+                      }}
+                    />
+                    <YAxis
+                      label={{
+                        value: "Total arrivals",
+                        angle: -90,
+                        position: "insideLeft",
+                      }}
+                    />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="arrivals" fill="#22c55E" />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
+              <div className="rounded-lg bg-card h-full w-full lg:w-1/3 p-4">
+                <FlightsByAirlineChart></FlightsByAirlineChart>
+              </div>
+            </div>
+
+            <div className="rounded-lg bg-card  w-full p-4">
+              TODO: Landing Page, Interacive charts and Map with geolocation
             </div>
           </>
         )}
@@ -732,14 +755,29 @@ function TopFlights() {
             FlightNumber,
             YycStatus,
           }) => {
-            const scheduled = new Date(ScheduledTime).toLocaleTimeString(
-              "en-US",
-              { hour12: false, hour: "2-digit", minute: "2-digit" }
+            const scheduledTime = utcToZonedTime(
+              new Date(ScheduledTime),
+              "America/Edmonton"
             );
-            const estimated = new Date(EstimatedTime).toLocaleTimeString(
-              "en-US",
-              { hour12: false, hour: "2-digit", minute: "2-digit" }
+            const estimatedTime = utcToZonedTime(
+              new Date(EstimatedTime),
+              "America/Edmonton"
             );
+
+            const scheduled = ScheduledTime
+              ? scheduledTime.toLocaleTimeString("en-US", {
+                  hour12: false,
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              : "";
+            const estimated = EstimatedTime
+              ? estimatedTime.toLocaleTimeString("en-US", {
+                  hour12: false,
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              : "";
             return (
               <div
                 className="flex flex-wrap items-center mt-3 border-b-2 border-gray-700 pb-2"

@@ -1,4 +1,5 @@
-import React, { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
+import { format } from 'date-fns';
 
 export const FlightsContext = createContext();
 
@@ -10,7 +11,7 @@ const FlightsProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchFlights = async () => {
-      setLoading(true)
+      setLoading(true);
       const response = await fetch(
         `https://rmsflightdata.yyc.com:8091/flights?t=${Date.now()}`
       );
@@ -18,18 +19,20 @@ const FlightsProvider = ({ children }) => {
       const todayFlights = [];
       const tomorrowFlights = [];
       const yesterdayFlights = [];
-      
+
       const now = new Date();
-      
+
       data.flights.forEach(flight => {
-        // parse the scheduled time
         const scheduledTime = new Date(flight.ScheduledTime);
-      
-        const diff = scheduledTime.getTime() - now.getTime();
-      
-        // calculate the difference in days
+
+        const canadaScheduledTime = format(scheduledTime, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx", {
+          timeZone: "America/Toronto"
+        });
+
+        const diff = new Date(canadaScheduledTime).getTime() - now.getTime();
+
         const diffInDays = diff / (1000 * 3600 * 24);
-      
+
         if (diffInDays < 0) {
           yesterdayFlights.push(flight);
         } else if (diffInDays < 1) {
@@ -38,25 +41,21 @@ const FlightsProvider = ({ children }) => {
           tomorrowFlights.push(flight);
         }
       });
-      
+
       setFlights(data.flights);
-      console.log(todayFlights)
       setFlightsByDay({
         today: todayFlights,
         tomorrow: tomorrowFlights,
         yesterday: yesterdayFlights
-      })
-      setLoading(false)
+      });
+      setLoading(false);
     };
 
     fetchFlights();
   }, []);
 
-
-
-
   return (
-    <FlightsContext.Provider value={{ flights, menu, isLoading, flightsByDay ,setMenu }}>
+    <FlightsContext.Provider value={{ flights, menu, isLoading, flightsByDay, setMenu }}>
       {children}
     </FlightsContext.Provider>
   );
