@@ -45,6 +45,16 @@ const AIRPLANE_IMG = {
     "https://ik.imgkit.net/3vlqs5axxjf/TW/uploadedImages/All_TW_Art/Shutterstock_Art/2017/DeltainVegas.jpg?tr=w-1200%2Cfo-auto",
   "United Airlines":
     "https://www.honeywell.com/content/dam/honeywellbt/en/images/content-images/news/article-banners/hon-ABUnited.jpg",
+  "Kelowna Flightcraft":
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo8r-Met615wyOjvxH2XnNAFchQyMUgNkeBaW-YvdS6QCneRIhLzuSCELsGEK2Cs9LrlM&usqp=CAU",
+  "Air North":
+    "https://www.travelweek.ca/wp-content/uploads/2021/11/20211126_Wired2-1.jpg",
+  "Canadian North":
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReEa9i3XP0iHv8r-7xugsPb50pPmqSZXB8jAUvTGNk4BNomAcmvCoLLpBZs5wiOTvYPXs&usqp=CAU",
+  "Alaska Airlines":
+    "https://gray-ktuu-prod.cdn.arcpublishing.com/resizer/5245nFPkSkckkasXA2e_MUM6jTI=/800x400/smart/filters:quality(70)/cloudfront-us-east-1.images.arcpublishing.com/gray/V23HEKOKV5GX7JVMZMFPPHDCQE.jpg",
+  "KLM Royal Dutch Airlines":
+    "data:image/jpeg;base64,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",
 };
 
 const colorPalette = ["#1F2937", "#3B82F6", "#10B981", "#F59E0B", "#EF4444"];
@@ -70,7 +80,7 @@ const colorPalette = ["#1F2937", "#3B82F6", "#10B981", "#F59E0B", "#EF4444"];
 
 const sidebarItems = [
   [
-    { id: "0", title: "Dashboard", notifications: false },
+    { id: "0", title: "Overview", notifications: false },
     { id: "1", title: "Analytics", notifications: false },
     // { id: '2', title: 'Chat', notifications: 6 },
     // { id: '3', title: 'Team', notifications: false },
@@ -176,6 +186,16 @@ function Sidebar({ onSidebarHide, showSidebar }) {
         <div className="mt-8 mb-0 font-bold px-3 block sm:hidden xl:block">
           SHORTCUTS
         </div>
+        <div className="relative w-full p-3 h-28 hidden sm:block sm:h-20 xl:h-32">
+          <Image
+            path="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6-ivbgN1aQ8X8J_Nzt9Mj6kwzHIiomGlfJpDeRHQLJIgjytb7JfFgepkCPBGSyej5Dgw&usqp=CAU"
+            className="w-full h-full rounded-xl opacity-40"
+          />
+          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center text-white font-bold text-3xl opacity-100">
+            YYC
+          </div>
+        </div>
+
         {sidebarItems[1].map((i) => (
           <MenuItem
             key={i.id}
@@ -185,6 +205,7 @@ function Sidebar({ onSidebarHide, showSidebar }) {
           />
         ))}
         <div className="flex-grow" />
+
         <div className="w-full p-3 h-28 hidden sm:block sm:h-20 xl:h-32">
           <div
             className="rounded-xl w-full h-full px-3 sm:px-0 xl:px-3 overflow-hidden"
@@ -195,7 +216,7 @@ function Sidebar({ onSidebarHide, showSidebar }) {
           >
             <div className="block sm:hidden xl:block pt-3">
               <div className="font-bold text-gray-300 text-sm">
-                Flights Today
+                Flights Completed
               </div>
               <div className="text-gray-500 text-xs">
                 This results are based on flight API
@@ -327,7 +348,7 @@ function Content({ onSidebarHide }) {
       departures: departuresByHour[hour] || 0,
     };
   });
-  console.log(arrivalsByHour)
+  console.log(arrivalsByHour);
   console.log(arrivalsDeparturesByHour);
 
   const hourlyDeparturesData = Object.keys(departuresByHour).map((hour) => {
@@ -337,20 +358,21 @@ function Content({ onSidebarHide }) {
     };
   });
 
- 
   const hourlyArrivalsData = Object.keys(arrivalsByHour).map((hour) => {
     return {
       hour: parseInt(hour),
       arrivals: arrivalsByHour[hour],
     };
   });
-  const hourlyArrivalDepartureData = Object.keys(arrivalsDeparturesByHour).map((hour) => {
-    return {
-      hour: parseInt(hour),
-      arrivals: arrivalsDeparturesByHour[hour].arrivals,
-      departures: arrivalsDeparturesByHour[hour].departures,
-    };
-  });
+  const hourlyArrivalDepartureData = Object.keys(arrivalsDeparturesByHour).map(
+    (hour) => {
+      return {
+        hour: parseInt(hour),
+        arrivals: arrivalsDeparturesByHour[hour].arrivals,
+        departures: arrivalsDeparturesByHour[hour].departures,
+      };
+    }
+  );
 
   // Set up today's date
   const today = new Date();
@@ -628,7 +650,7 @@ function FlightCard({
     barPlayhead: 1,
     from: { transactions: 0, barPlayhead: 0 },
   });
-  const { flights, selectedDay } = useContext(FlightsContext);
+  const { flightsByDay, selectedDay } = useContext(FlightsContext);
 
   return (
     <div className="w-full p-2 lg:w-1/3">
@@ -658,7 +680,8 @@ function FlightCard({
             <rect width="200" height="6" rx="3" fill="#2D2D2D" />
             <animated.rect
               width={barPlayhead.interpolate(
-                (i) => i * (tasksCompleted / flights.length) * 200
+                (i) =>
+                  i * (tasksCompleted / flightsByDay[selectedDay].length) * 200
               )}
               height="6"
               rx="3"
