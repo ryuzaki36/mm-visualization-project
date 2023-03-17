@@ -9,6 +9,7 @@ const FlightsProvider = ({ children }) => {
   const [isLoading, setLoading] = useState(false);
   const [menu, setMenu] = useState("dashboard");
   const [status, setStatus] = useState("Arrivals");
+  const [selectedDay, setSelectedDay] = useState("today");
 
   useEffect(() => {
     const fetchFlights = async () => {
@@ -56,7 +57,7 @@ const FlightsProvider = ({ children }) => {
   }, []);
 
   return (
-    <FlightsContext.Provider value={{ flights, menu, isLoading, flightsByDay, setMenu, status, setStatus }}>
+    <FlightsContext.Provider value={{ flights, menu, isLoading, flightsByDay, status, selectedDay, setMenu, setSelectedDay , setStatus }}>
       {children}
     </FlightsContext.Provider>
   );

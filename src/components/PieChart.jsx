@@ -3,10 +3,10 @@ import { ResponsiveContainer, PieChart, Pie, Tooltip, Legend, Cell } from "recha
 import { FlightsContext } from "../context/Flights";
 
 const FlightsByAirlineChart = () => {
-  const { flightsByDay } = useContext(FlightsContext);
+  const { flightsByDay,selectedDay } = useContext(FlightsContext);
 
   // create an object to store the count of flights by airline
-  const countsByAirline = flightsByDay?.today?.reduce((counts, flight) => {
+  const countsByAirline = flightsByDay[selectedDay]?.reduce((counts, flight) => {
     const airline = flight.Airline.Name;
     counts[airline] = (counts[airline] || 0) + 1;
     return counts;

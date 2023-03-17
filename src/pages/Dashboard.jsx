@@ -11,6 +11,8 @@ import Chart from "../components/BarChart";
 import FlightsByAirlineChart from "../components/PieChart";
 import { DropDown } from "../components/DropDown";
 import FlightPath from "../components/FlightPath";
+import { SelectionDay } from "../components/SelectionDay";
+import ComparitiveChart from "../components/ComparitiveChart";
 const {
   LineChart,
   Line,
@@ -298,31 +300,35 @@ function MenuItem({ item: { id, title, notifications }, onClick, selected }) {
   );
 }
 function Content({ onSidebarHide }) {
-  const { menu, flights, flightsByDay, status } = useContext(FlightsContext);
+  const { menu, flights, flightsByDay, status, selectedDay } =
+    useContext(FlightsContext);
 
   const arrivalsByHour = {};
   const departuresByHour = {};
+  const arrivalsDeparturesByHour = {};
   let totalArrivals = 0;
   let totalDepartures = 0;
 
-  flightsByDay?.today?.forEach((entry) => {
+  flightsByDay[selectedDay]?.forEach((entry) => {
     const scheduledTime = new Date(entry.ScheduledTime);
+    const hour = scheduledTime.getHours();
+
     if (entry.Leg === "A") {
-      const hour = scheduledTime.getHours();
-      if (!arrivalsByHour[hour]) {
-        arrivalsByHour[hour] = 0;
-      }
-      arrivalsByHour[hour]++;
+      arrivalsByHour[hour] = (arrivalsByHour[hour] || 0) + 1;
       totalArrivals += 1;
     } else {
-      const hour = scheduledTime.getHours();
-      if (!departuresByHour[hour]) {
-        departuresByHour[hour] = 0;
-      }
-      departuresByHour[hour]++;
+      departuresByHour[hour] = (departuresByHour[hour] || 0) + 1;
       totalDepartures += 1;
     }
+
+    arrivalsDeparturesByHour[hour] = {
+      hour,
+      arrivals: arrivalsByHour[hour] || 0,
+      departures: departuresByHour[hour] || 0,
+    };
   });
+  console.log(arrivalsByHour)
+  console.log(arrivalsDeparturesByHour);
 
   const hourlyDeparturesData = Object.keys(departuresByHour).map((hour) => {
     return {
@@ -330,34 +336,61 @@ function Content({ onSidebarHide }) {
       departures: departuresByHour[hour],
     };
   });
+
+ 
   const hourlyArrivalsData = Object.keys(arrivalsByHour).map((hour) => {
     return {
       hour: parseInt(hour),
       arrivals: arrivalsByHour[hour],
     };
   });
+  const hourlyArrivalDepartureData = Object.keys(arrivalsDeparturesByHour).map((hour) => {
+    return {
+      hour: parseInt(hour),
+      arrivals: arrivalsDeparturesByHour[hour].arrivals,
+      departures: arrivalsDeparturesByHour[hour].departures,
+    };
+  });
 
-  console.log(hourlyDeparturesData);
-  console.log(hourlyArrivalsData);
+  // Set up today's date
+  const today = new Date();
+
+  // Use the setDate method to get yesterday's date
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+
+  // Use the setDate method again to get tomorrow's date
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+
+  // Use a conditional statement to choose which date to display
+  let dateToDisplay;
+  if (selectedDay === "yesterday") {
+    dateToDisplay = yesterday;
+  } else if (selectedDay === "tomorrow") {
+    dateToDisplay = tomorrow;
+  } else {
+    dateToDisplay = today;
+  }
 
   const flightData = [
     {
       id: 1,
       name: "Total Flights",
-      position: new Date().toLocaleString("default", {
+      position: dateToDisplay.toLocaleString("default", {
         month: "long",
         day: "numeric",
       }),
-      transactions: flightsByDay?.today?.length,
+      transactions: flightsByDay[selectedDay]?.length,
       rise: true,
-      tasksCompleted: flightsByDay?.today?.length,
+      tasksCompleted: flightsByDay[selectedDay]?.length,
       imgId:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9fW0Cb3YIREQDznkbRIvMizpZ_vJdy1ah_K5DsGei5sYK2TwXIKPWS0zHovvZMIDQw-Q&usqp=CAU",
     },
     {
       id: 2,
       name: "Total Arrivals",
-      position: new Date().toLocaleString("default", {
+      position: dateToDisplay.toLocaleString("default", {
         month: "long",
         day: "numeric",
       }),
@@ -370,7 +403,7 @@ function Content({ onSidebarHide }) {
     {
       id: 3,
       name: "Total Departures",
-      position: new Date().toLocaleString("default", {
+      position: dateToDisplay.toLocaleString("default", {
         month: "long",
         day: "numeric",
       }),
@@ -381,6 +414,7 @@ function Content({ onSidebarHide }) {
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm6MOd3qre7gln8CDgwy034IzEeD-9uvuFhg&usqp=CAU",
     },
   ];
+
   return (
     <div className="flex w-full">
       <div className="w-full h-screen hidden sm:block sm:w-20 xl:w-60 flex-shrink-0">
@@ -406,7 +440,7 @@ function Content({ onSidebarHide }) {
                   className="w-3 h-3"
                 />
                 <div className="ml-2">
-                  {new Date().toLocaleString("default", {
+                  {dateToDisplay.toLocaleString("default", {
                     month: "long",
                     day: "numeric",
                   })}
@@ -419,21 +453,7 @@ function Content({ onSidebarHide }) {
               onClick={onSidebarHide}
             />
           </div>
-          <div className="w-full sm:w-56 mt-4 sm:mt-0 relative">
-            <Icon
-              path="res-react-dash-search"
-              className="w-5 h-5 search-icon left-3 absolute"
-            />
-            <form action="#" method="POST">
-              <input
-                type="text"
-                name="company_website"
-                id="company_website"
-                className="pl-12 py-2 pr-2 block w-full rounded-lg border-gray-300 bg-card"
-                placeholder="search"
-              />
-            </form>
-          </div>
+          <SelectionDay />
         </div>
 
         {/* <div className="ml-2 font-bold text-premium-yellow">
@@ -547,6 +567,16 @@ function Content({ onSidebarHide }) {
             </div>
 
             <div className="rounded-lg bg-card  w-full p-4">
+              <div className="font-bold text-gray-600 text-center">
+                Comparision of Arrivals and Departures for{" "}
+                {dateToDisplay.toLocaleString("default", {
+                  month: "long",
+                  day: "numeric",
+                })}
+              </div>
+              <ComparitiveChart data={hourlyArrivalDepartureData} />
+            </div>
+            <div className="rounded-lg bg-card  w-full p-4">
               Remaing: Map chart and landing page
             </div>
           </>
@@ -598,7 +628,7 @@ function FlightCard({
     barPlayhead: 1,
     from: { transactions: 0, barPlayhead: 0 },
   });
-  const { flights } = useContext(FlightsContext);
+  const { flights, selectedDay } = useContext(FlightsContext);
 
   return (
     <div className="w-full p-2 lg:w-1/3">
@@ -615,7 +645,9 @@ function FlightCard({
             </div>
           </div>
 
-          <div className="text-sm  mt-2">{`Today`}</div>
+          <div className="text-sm  mt-2">
+            {selectedDay[0].toUpperCase() + selectedDay.slice(1)}
+          </div>
           <svg
             className="w-44 mt-3"
             height="6"
