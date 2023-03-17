@@ -8,6 +8,7 @@ const FlightsProvider = ({ children }) => {
   const [flightsByDay, setFlightsByDay] = useState({});
   const [isLoading, setLoading] = useState(false);
   const [menu, setMenu] = useState("dashboard");
+  const [status, setStatus] = useState("Arrivals");
 
   useEffect(() => {
     const fetchFlights = async () => {
@@ -26,7 +27,7 @@ const FlightsProvider = ({ children }) => {
         const scheduledTime = new Date(flight.ScheduledTime);
 
         const canadaScheduledTime = format(scheduledTime, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx", {
-          timeZone: "America/Toronto"
+          timeZone: "America/Edmonton"
         });
 
         const diff = new Date(canadaScheduledTime).getTime() - now.getTime();
@@ -55,7 +56,7 @@ const FlightsProvider = ({ children }) => {
   }, []);
 
   return (
-    <FlightsContext.Provider value={{ flights, menu, isLoading, flightsByDay, setMenu }}>
+    <FlightsContext.Provider value={{ flights, menu, isLoading, flightsByDay, setMenu, status, setStatus }}>
       {children}
     </FlightsContext.Provider>
   );

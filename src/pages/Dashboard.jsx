@@ -10,6 +10,7 @@ import * as Recharts from "recharts";
 import Chart from "../components/BarChart";
 import FlightsByAirlineChart from "../components/PieChart";
 import { MapChart } from "../components/MapChart";
+import { DropDown } from "../components/DropDown";
 const {
   LineChart,
   Line,
@@ -297,7 +298,7 @@ function MenuItem({ item: { id, title, notifications }, onClick, selected }) {
   );
 }
 function Content({ onSidebarHide }) {
-  const { menu, flights, flightsByDay } = useContext(FlightsContext);
+  const { menu, flights, flightsByDay, status } = useContext(FlightsContext);
 
   const arrivalsByHour = {};
   const departuresByHour = {};
@@ -326,7 +327,7 @@ function Content({ onSidebarHide }) {
   const hourlyDeparturesData = Object.keys(departuresByHour).map((hour) => {
     return {
       hour: parseInt(hour),
-      arrivals: departuresByHour[hour],
+      departures: departuresByHour[hour],
     };
   });
   const hourlyArrivalsData = Object.keys(arrivalsByHour).map((hour) => {
@@ -335,6 +336,9 @@ function Content({ onSidebarHide }) {
       arrivals: arrivalsByHour[hour],
     };
   });
+
+  console.log(hourlyDeparturesData);
+  console.log(hourlyArrivalsData)
 
   const flightData = [
     {
@@ -348,6 +352,7 @@ function Content({ onSidebarHide }) {
       rise: true,
       tasksCompleted: flightsByDay?.today?.length,
       imgId:
+      
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9fW0Cb3YIREQDznkbRIvMizpZ_vJdy1ah_K5DsGei5sYK2TwXIKPWS0zHovvZMIDQw-Q&usqp=CAU",
     },
     {
@@ -428,7 +433,7 @@ function Content({ onSidebarHide }) {
                 className="pl-12 py-2 pr-2 block w-full rounded-lg border-gray-300 bg-card"
                 placeholder="search"
               />
-            </form>
+            </form> 
           </div>
         </div>
 
@@ -476,13 +481,13 @@ function Content({ onSidebarHide }) {
                     alt=""
                     className="w-4 h-4"
                   />
-                  <div className="ml-2">Last 24 hours</div>
+                  <DropDown />
                   <div className="ml-6 w-5 h-5 flex justify-center items-center rounded-full icon-background">
                     ?
                   </div>
                 </div>
                 <ResponsiveContainer width="100%" height={400}>
-                  <BarChart
+                {status ==='Arrivals' ?   <BarChart
                     data={hourlyArrivalsData}
                     margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                     className="w-full"
@@ -506,7 +511,31 @@ function Content({ onSidebarHide }) {
                     <Tooltip />
                     <Legend />
                     <Bar dataKey="arrivals" fill="#22c55E" />
-                  </BarChart>
+                  </BarChart>:  <BarChart
+                    data={hourlyDeparturesData}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                    className="w-full"
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis
+                      dataKey="hour"
+                      label={{
+                        value: "Hour of day",
+                        position: "insideBottomRight",
+                        offset: -10,
+                      }}
+                    />
+                    <YAxis
+                      label={{
+                        value: "Total departures",
+                        angle: -90,
+                        position: "insideLeft",
+                      }}
+                    />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="departures" fill="#FDBA74" />
+                  </BarChart> }
                 </ResponsiveContainer>
               </div>
               <div className="rounded-lg bg-card w-full lg:w-1/3 p-4">
