@@ -9,8 +9,8 @@ import { utcToZonedTime } from "date-fns-tz";
 import * as Recharts from "recharts";
 import Chart from "../components/BarChart";
 import FlightsByAirlineChart from "../components/PieChart";
-import { MapChart } from "../components/MapChart";
 import { DropDown } from "../components/DropDown";
+import FlightPath from "../components/FlightPath";
 const {
   LineChart,
   Line,
@@ -338,7 +338,7 @@ function Content({ onSidebarHide }) {
   });
 
   console.log(hourlyDeparturesData);
-  console.log(hourlyArrivalsData)
+  console.log(hourlyArrivalsData);
 
   const flightData = [
     {
@@ -352,7 +352,6 @@ function Content({ onSidebarHide }) {
       rise: true,
       tasksCompleted: flightsByDay?.today?.length,
       imgId:
-      
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9fW0Cb3YIREQDznkbRIvMizpZ_vJdy1ah_K5DsGei5sYK2TwXIKPWS0zHovvZMIDQw-Q&usqp=CAU",
     },
     {
@@ -433,7 +432,7 @@ function Content({ onSidebarHide }) {
                 className="pl-12 py-2 pr-2 block w-full rounded-lg border-gray-300 bg-card"
                 placeholder="search"
               />
-            </form> 
+            </form>
           </div>
         </div>
 
@@ -487,55 +486,59 @@ function Content({ onSidebarHide }) {
                   </div>
                 </div>
                 <ResponsiveContainer width="100%" height={400}>
-                {status ==='Arrivals' ?   <BarChart
-                    data={hourlyArrivalsData}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                    className="w-full"
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis
-                      dataKey="hour"
-                      label={{
-                        value: "Hour of day",
-                        position: "insideBottomRight",
-                        offset: -10,
-                      }}
-                    />
-                    <YAxis
-                      label={{
-                        value: "Total arrivals",
-                        angle: -90,
-                        position: "insideLeft",
-                      }}
-                    />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="arrivals" fill="#22c55E" />
-                  </BarChart>:  <BarChart
-                    data={hourlyDeparturesData}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-                    className="w-full"
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis
-                      dataKey="hour"
-                      label={{
-                        value: "Hour of day",
-                        position: "insideBottomRight",
-                        offset: -10,
-                      }}
-                    />
-                    <YAxis
-                      label={{
-                        value: "Total departures",
-                        angle: -90,
-                        position: "insideLeft",
-                      }}
-                    />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="departures" fill="#FDBA74" />
-                  </BarChart> }
+                  {status === "Arrivals" ? (
+                    <BarChart
+                      data={hourlyArrivalsData}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                      className="w-full"
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis
+                        dataKey="hour"
+                        label={{
+                          value: "Hour of day",
+                          position: "insideBottomRight",
+                          offset: -10,
+                        }}
+                      />
+                      <YAxis
+                        label={{
+                          value: "Total arrivals",
+                          angle: -90,
+                          position: "insideLeft",
+                        }}
+                      />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="arrivals" fill="#22c55E" />
+                    </BarChart>
+                  ) : (
+                    <BarChart
+                      data={hourlyDeparturesData}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                      className="w-full"
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis
+                        dataKey="hour"
+                        label={{
+                          value: "Hour of day",
+                          position: "insideBottomRight",
+                          offset: -10,
+                        }}
+                      />
+                      <YAxis
+                        label={{
+                          value: "Total departures",
+                          angle: -90,
+                          position: "insideLeft",
+                        }}
+                      />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="departures" fill="#FDBA74" />
+                    </BarChart>
+                  )}
                 </ResponsiveContainer>
               </div>
               <div className="rounded-lg bg-card w-full lg:w-1/3 p-4">
@@ -544,7 +547,7 @@ function Content({ onSidebarHide }) {
             </div>
 
             <div className="rounded-lg bg-card  w-full p-4">
-              TODO: Landing Page, Interacive charts and Map with geolocation
+              Remaing: Map chart and landing page
             </div>
           </>
         )}
