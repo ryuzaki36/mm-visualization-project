@@ -1,4 +1,6 @@
 import React, { useContext, useState } from "react";
+import { faCircleChevronDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Icon } from "../pages/Dashboard";
 import {
   Menu,
@@ -17,7 +19,8 @@ export function DropDown() {
   return (
     <Menu placement="right" offset={[0, -10]}>
       <MenuButton as="div">
-        <div className="ml-2">{status}</div>
+        <div className="ml-2">{status} &nbsp; <FontAwesomeIcon icon={faCircleChevronDown}></FontAwesomeIcon></div>
+       
       </MenuButton>
       <Portal>
         <MenuList>

@@ -490,9 +490,7 @@ function Content({ onSidebarHide }) {
                     className="w-4 h-4"
                   />
                   <DropDown />
-                  <div className="ml-6 w-5 h-5 flex justify-center items-center rounded-full icon-background">
-                    ?
-                  </div>
+                  
                 </div>
                 <ResponsiveContainer width="100%" height={600}>
                   {status === "Arrivals" ? (
