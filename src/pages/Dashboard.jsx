@@ -280,23 +280,7 @@ function Sidebar({ onSidebarHide, showSidebar }) {
         </div>
       </div>
 
-      <div className="flex-shrink-0 overflow-hidden p-2">
-        <div className="flex items-center h-full sm:justify-center xl:justify-start p-2 sidebar-separator-bottom">
-          <img
-            src="https://cdn.discordapp.com/attachments/816676404879556621/1084561311498772520/Screenshot_from_2023-03-13_01-23-19.png"
-            alt="yugesh"
-            className="w-10 h-10 rounded-full"
-          />
-          <div className="block sm:hidden xl:block ml-2 font-bold text-orange-600">
-            Yugesh Bantawa
-          </div>
-          <div className="flex-grow block sm:hidden xl:block" />
-          <Icon
-            path="res-react-dash-options"
-            className="block sm:hidden xl:block w-3 h-3"
-          />
-        </div>
-      </div>
+
     </div>
   );
 }
@@ -447,21 +431,10 @@ function Content({ onSidebarHide }) {
             <div className="">
               <div className="flex items-center">
                 <div className="text-3xl font-bold text-white">
-                  Hello Yugesh
+                  Airport Data Visualization
                 </div>
               </div>
-              <div className="flex items-center">
-                <Icon
-                  path="res-react-dash-date-indicator"
-                  className="w-3 h-3"
-                />
-                <div className="ml-2">
-                  {dateToDisplay.toLocaleString("default", {
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </div>
-              </div>
+            
             </div>
             <IconButton
               icon="res-react-dash-sidebar-open"
@@ -507,7 +480,7 @@ function Content({ onSidebarHide }) {
               )
             )}
             <div className="w-full p-2 flex flex-wrap">
-              <div className="rounded-lg bg-card w-full lg:w-2/3 p-4">
+              <div className="rounded-lg bg-card w-full p-4">
                 <div className="flex items-center">
                   <div className="font-bold text-white">Flight Summary</div>
                   <div className="flex-grow" />
@@ -521,7 +494,7 @@ function Content({ onSidebarHide }) {
                     ?
                   </div>
                 </div>
-                <ResponsiveContainer width="100%" height={400}>
+                <ResponsiveContainer width="100%" height={600}>
                   {status === "Arrivals" ? (
                     <BarChart
                       data={hourlyArrivalsData}
@@ -577,7 +550,7 @@ function Content({ onSidebarHide }) {
                   )}
                 </ResponsiveContainer>
               </div>
-              <div className="rounded-lg bg-card w-full lg:w-1/3 p-4">
+              <div className="rounded-lg bg-card w-full mt-4 p-4">
                 <FlightsByAirlineChart></FlightsByAirlineChart>
               </div>
             </div>

@@ -92,37 +92,20 @@ export const Landing = () => {
                 </form>
                 <div className="mt-12 hidden lg:block">
                   <span className="text-[#F0FFF0] dark:text-white">
-                    From the most talented{" "}
+                  
                     <a
                       href="/"
                       className="text-orange-600 underline dark:text-primaryLight"
                     >
                       Team
                     </a>{" "}
-                    <span className="text-orange-600">!</span>
-                  </span>
-                  <div className="mt-5 flex space-x-4">
-                    <img
-                      src="https://ampire.netlify.app/images/avatars/avatar-2.webp"
-                      alt="user avatar"
-                      className="h-12 w-12 rounded-full object-cover ring-2 z-10 ring-[#F0FFFA] dark:ring-[#F0FFFA]"
-                      width="400"
-                      height="400"
-                    />
-                    <img
-                      src="https://ampire.netlify.app/images/avatars/avatar-3.webp"
-                      alt="user avatar"
-                      className="h-12 w-12 rounded-full object-cover ring-2 z-20 ring-[#F0FFFA] dark:ring-[#F0FFFA]"
-                      width="400"
-                      height="400"
-                    />
-                    <img
-                      src="https://cdn.discordapp.com/attachments/816676404879556621/1084561311498772520/Screenshot_from_2023-03-13_01-23-19.png"
-                      alt="user avatar"
-                      className="h-12 w-12 rounded-full object-cover ring-2 z-30 ring-[#F0FFFA] dark:ring-[#F0FFFA]"
-                      width="400"
-                      height="400"
-                    />
+                    <span className="text-orange-600"></span>Members
+                  </span> 
+                  <div className="mt-5 flex space-x-4 flex-col">
+                    <span className="text-[#F0FFF0] dark:text-white ml-4"> Amanjit Kaur </span>
+                    <span className="text-[#F0FFF0] dark:text-white m-0"> Kalpak Bansod </span>
+                    <span className="text-[#F0FFF0] dark:text-white m-0"> Yugesh Chandra Rai </span>
+
                   </div>
                 </div>
               </div>

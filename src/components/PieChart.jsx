@@ -86,17 +86,19 @@ const FlightsByAirlineChart = () => {
     "#A7F3D0",
   ];
 
+
   return (
-      <ResponsiveContainer width="100%" height={400}>
-        <PieChart>
+      <ResponsiveContainer width="100%" height={600} >
+        <PieChart >
           <Pie
+        
             data={data}
             dataKey="value"
             nameKey="name"
             cx="50%"
             cy="50%"
-            outerRadius={100}
-            innerRadius={60}
+            outerRadius={200}
+            innerRadius={100}
             fill="#8884d8"
             labelLine={false}
             label={false}
