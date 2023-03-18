@@ -191,7 +191,7 @@ function Sidebar({ onSidebarHide, showSidebar }) {
             path="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6-ivbgN1aQ8X8J_Nzt9Mj6kwzHIiomGlfJpDeRHQLJIgjytb7JfFgepkCPBGSyej5Dgw&usqp=CAU"
             className="w-full h-full rounded-xl opacity-40"
           />
-          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center text-white font-bold text-3xl opacity-100">
+          <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center text-orange-600 font-bold text-3xl opacity-100">
             YYC
           </div>
         </div>
@@ -221,10 +221,10 @@ function Sidebar({ onSidebarHide, showSidebar }) {
               <div className="text-gray-500 text-xs">
                 This results are based on flight API
               </div>
-              <animated.div className="text-right text-gray-400 text-xs">
+              <animated.div className="text-right text-orange-400 text-xs">
                 {precentage.interpolate((i) => `${Math.round(i)}%`)}
               </animated.div>
-              <div className="w-full text-gray-300">
+              <div className="w-full text-orange-600">
                 <svg
                   viewBox="0 0 100 11"
                   fill="none"
@@ -287,7 +287,7 @@ function Sidebar({ onSidebarHide, showSidebar }) {
             alt="yugesh"
             className="w-10 h-10 rounded-full"
           />
-          <div className="block sm:hidden xl:block ml-2 font-bold ">
+          <div className="block sm:hidden xl:block ml-2 font-bold text-orange-600">
             Yugesh Bantawa
           </div>
           <div className="flex-grow block sm:hidden xl:block" />
@@ -348,8 +348,7 @@ function Content({ onSidebarHide }) {
       departures: departuresByHour[hour] || 0,
     };
   });
-  console.log(arrivalsByHour);
-  console.log(arrivalsDeparturesByHour);
+  
 
   const hourlyDeparturesData = Object.keys(departuresByHour).map((hour) => {
     return {
@@ -449,11 +448,6 @@ function Content({ onSidebarHide }) {
               <div className="flex items-center">
                 <div className="text-3xl font-bold text-white">
                   Hello Yugesh
-                </div>
-                <div className="flex items-center p-2 bg-card ml-2 rounded-xl">
-                  <Icon path="res-react-dash-premium-star" />
-
-                  <div className="ml-2 font-bold text-premium-yellow">PRO</div>
                 </div>
               </div>
               <div className="flex items-center">
@@ -588,8 +582,8 @@ function Content({ onSidebarHide }) {
               </div>
             </div>
 
-            <div className="rounded-lg bg-card  w-full p-4">
-              <div className="font-bold text-gray-600 text-center">
+            <div className="rounded-lg bg-card  w-full p-4 m-2">
+              <div className="font-bold text-orange-600 text-center">
                 Comparision of Arrivals and Departures for{" "}
                 {dateToDisplay.toLocaleString("default", {
                   month: "long",
@@ -598,7 +592,7 @@ function Content({ onSidebarHide }) {
               </div>
               <ComparitiveChart data={hourlyArrivalDepartureData} />
             </div>
-            <div className="rounded-lg bg-card  w-full p-4">
+            <div className="rounded-lg bg-card  w-full p-4 m-2">
               Remaing: Map chart and landing page
             </div>
           </>

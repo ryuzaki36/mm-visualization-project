@@ -7,11 +7,11 @@ export const Landing = () => {
   const history = useHistory();
   return (
     <>
-      <section className="pt-32 sm:pt-40 md:pt-48">
+      <section className="pt-32 sm:pt-40 md:pt-[10rem] h-[100vh] bg-[#171717] ">
         <div className="mx-auto px-4 sm:px-12 xl:max-w-6xl xl:px-0">
           <div className="relative">
-            <h1 className="text-center text-5xl font-bold text-purple-300 dark:text-white sm:text-6xl lg:text-left lg:text-7xl">
-              Visualize Flight &nbsp;
+            <h1 className="text-center text-5xl font-bold text-orange-600 dark:text-white sm:text-6xl lg:text-left lg:text-7xl">
+              Visualize Flight{" "}
               <span className="relative">
                 <svg
                   className="absolute inset-x-0 -bottom-1 w-full opacity-50"
@@ -22,7 +22,7 @@ export const Landing = () => {
                   <style
                     dangerouslySetInnerHTML={{
                       __html:
-                        "\n                                    .st0 {\n    fill: #957fef\n}\n                                ",
+                        "\n                                    .st0 {\n    fill: #EA580C\n}\n                                ",
                     }}
                   />
                   <path
@@ -38,15 +38,15 @@ export const Landing = () => {
                     d="M58.1 11.1c-1 0-1.9 0-2.3.2.2.2 2.3.6 2.3-.2zM208.2 13.3c-.1 0-.3.1-.4.1.1 0 .3 0 .4-.1zM216.3 12.9c-.1-.1-.2-.2-.4-.3 0 .3.1.5.4.3zM132.6 11.5zM178.5 13.7c.7-.4 1-.7 1-1-.4.1-.7.3-1 1zM163 12.6c-.1.1-.2.1-.3.2.3-.1.3-.2.3-.2zM130.2 12c.7-.4 1.6-.3 2.4-.5-.7.2-1.9-.3-2.4.5zM226.1 11.4l-.7.6.8-.4zM218.6 12c-.3-.1-1.7.3-1.3.6.4-.3.9-.5 1.3-.6zM189.6 11.4l-.3.6.7-.5z"
                   />
                 </svg>
-                <span className="relative bg-gradient-to-r from-primary to-secondaryLight bg-clip-text dark:from-primaryLight dark:to-secondaryLight md:px-2 text-green-200">
+                <span className="relative bg-gradient-to-r from-primary to-secondaryLight bg-clip-text dark:from-primaryLight dark:to-secondaryLight md:px-2 text-[#F0FFF0]">
                   Data
                 </span>
               </span>
             </h1>
             <div className="relative items-center gap-12 lg:flex">
               <div className="text-center sm:mx-auto sm:w-11/12 md:mt-12 md:w-4/5 lg:mt-0 lg:mr-auto lg:w-6/12 lg:text-left">
-                <p className="mt-12 text-lg text-gray-600 dark:text-gray-300 sm:text-xl">
-                  Check out our flight data of YYC airport data to create
+                <p className="mt-12 text-lg text-[#676767] dark:text-gray-300 sm:text-xl">
+                  Check out our flight data of Calgary airport data to create
                   interactive charts that give you a clear picture of flight
                   patterns and trends. See at a glance which airlines are
                   busiest, which routes are most popular, and more. Try it out
@@ -73,10 +73,9 @@ export const Landing = () => {
                       <button
                         type="submit"
                         title="Start buying"
-                        className="relative ml-auto h-12 w-16 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 active:duration-75 active:before:scale-95 dark:before:bg-primaryLight sm:w-auto sm:px-6"
+                        className="relative ml-auto h-12 w-16 before:absolute before:inset-0 before:rounded-full before:bg-orange-600 before:transition before:duration-300 active:duration-75 active:before:scale-95 dark:before:bg-primaryLight sm:w-auto sm:px-6"
                       >
                         <span className="relative hidden w-max font-semibold text-white dark:text-gray-900 md:block">
-                          {" "}
                           Get Started{" "}
                         </span>
                         <svg
@@ -91,50 +90,41 @@ export const Landing = () => {
                     </div>
                   </div>
                 </form>
-                {/* <div className="mt-12 hidden lg:block">
-                  <span className="text-gray-700 dark:text-white">
+                <div className="mt-12 hidden lg:block">
+                  <span className="text-[#F0FFF0] dark:text-white">
                     From the most talented{" "}
                     <a
-                      href="customers.html"
-                      className="text-primary underline dark:text-primaryLight"
+                      href="/"
+                      className="text-orange-600 underline dark:text-primaryLight"
                     >
                       Team
                     </a>{" "}
-                    !
+                    <span className="text-orange-600">!</span>
                   </span>
-                  <div className="mt-5 flex -space-x-1 children:h-10 children:w-10 children:rounded-full children:object-cover children:ring-4 children:ring-gray-100 dark:children:ring-gray-900">
+                  <div className="mt-5 flex space-x-4">
                     <img
-                      src="./images/avatars/avatar.webp"
+                      src="https://ampire.netlify.app/images/avatars/avatar-2.webp"
                       alt="user avatar"
-                      width={400}
-                      height={400}
+                      className="h-12 w-12 rounded-full object-cover ring-2 z-10 ring-[#F0FFFA] dark:ring-[#F0FFFA]"
+                      width="400"
+                      height="400"
                     />
                     <img
-                      src="./images/avatars/avatar-1.webp"
+                      src="https://ampire.netlify.app/images/avatars/avatar-3.webp"
                       alt="user avatar"
-                      width={200}
-                      height={200}
+                      className="h-12 w-12 rounded-full object-cover ring-2 z-20 ring-[#F0FFFA] dark:ring-[#F0FFFA]"
+                      width="400"
+                      height="400"
                     />
                     <img
-                      src="./images/avatars/avatar-2.webp"
+                      src="https://cdn.discordapp.com/attachments/816676404879556621/1084561311498772520/Screenshot_from_2023-03-13_01-23-19.png"
                       alt="user avatar"
-                      width={200}
-                      height={200}
-                    />
-                    <img
-                      src="./images/avatars/avatar-3.webp"
-                      alt="user avatar"
-                      width={200}
-                      height={200}
-                    />
-                    <img
-                      src="./images/avatars/avatar-4.webp"
-                      alt="user avatar"
-                      width={200}
-                      height={200}
+                      className="h-12 w-12 rounded-full object-cover ring-2 z-30 ring-[#F0FFFA] dark:ring-[#F0FFFA]"
+                      width="400"
+                      height="400"
                     />
                   </div>
-                </div> */}
+                </div>
               </div>
               <div className="mt-12 w-full overflow-hidden sm:mt-20 lg:-mt-8 lg:w-6/12">
                 <img
