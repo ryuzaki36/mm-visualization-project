@@ -803,7 +803,7 @@ function TopFlights() {
             Airport,
             FlightNumber,
             YycStatus,
-          }) => {
+          }, index) => {
             const scheduledTime = utcToZonedTime(
               new Date(ScheduledTime),
               "America/Edmonton"
@@ -830,7 +830,7 @@ function TopFlights() {
             return (
               <div
                 className="flex flex-wrap items-center mt-3 border-b-2 border-gray-700 pb-2"
-                key={Id}
+                key={index}
               >
                 <div className="w-full sm:w-1/7">{FlightNumber}</div>
                 <div className="w-full sm:w-1/7">

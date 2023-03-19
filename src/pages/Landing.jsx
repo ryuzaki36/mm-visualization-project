@@ -90,22 +90,46 @@ export const Landing = () => {
                     </div>
                   </div>
                 </form>
-                <div className="mt-12 hidden lg:block">
-                  <span className="text-[#F0FFF0] dark:text-white">
-                  
+                <div className="mt-12 hidden lg:block ">
+                  <span className="text-[#F0FFF0] dark:text-white flex justify-center font-bold text-xl">
                     <a
                       href="/"
                       className="text-orange-600 underline dark:text-primaryLight"
                     >
                       Team
                     </a>{" "}
-                    <span className="text-orange-600"></span>Members
-                  </span> 
-                  <div className="mt-5 flex space-x-4 flex-col">
-                    <span className="text-[#F0FFF0] dark:text-white ml-4"> Amanjit Kaur </span>
-                    <span className="text-[#F0FFF0] dark:text-white m-0"> Kalpak Bansod </span>
-                    <span className="text-[#F0FFF0] dark:text-white m-0"> Yugesh Chandra Rai </span>
-
+                    <span className="text-orange-600"></span> &nbsp;Members
+                  </span>
+                  <div className="mt-5 hidden lg:block transform scale-[0.8]">
+                    <div className="mt-5 grid grid-cols-3 gap-4">
+                      <div className="bg-green-700 rounded-full p-4 text-[#F0FFF0] dark:text-white flex items-center justify-center flex-col">
+                        {/* <img
+                          src="https://via.placeholder.com/150"
+                          alt="Amanjit Kaur"
+                          className="w-32 h-32 rounded-full mb-2"
+                        /> */}
+                        <span className="text-lg font-bold">Amanjit Kaur</span>
+                        <span className="text-sm">No. 123</span>
+                      </div>
+                      <div className="bg-green-700 rounded-full p-4 text-[#F0FFF0] dark:text-white flex items-center justify-center flex-col">
+                        {/* <img
+                          src="https://via.placeholder.com/150"
+                          alt="Kalpak Bansod"
+                          className="w-32 h-32 rounded-full mb-2"
+                        /> */}
+                        <span className="text-lg font-bold">Kalpak Bansod</span>
+                        <span className="text-sm">No. 123</span>
+                      </div>
+                      <div className="bg-green-700 rounded-full p-4 text-[#F0FFF0] dark:text-white flex items-center justify-center flex-col">
+                        {/* <img
+                          src="https://via.placeholder.com/150"
+                          alt="Kalpak Bansod"
+                          className="w-32 h-32 rounded-full mb-2"
+                        /> */}
+                        <span className="text-lg font-bold">Yugesh Rai</span>
+                        <span className="text-sm">No. 123</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
