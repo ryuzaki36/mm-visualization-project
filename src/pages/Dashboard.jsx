@@ -279,8 +279,6 @@ function Sidebar({ onSidebarHide, showSidebar }) {
           </div>
         </div>
       </div>
-
-
     </div>
   );
 }
@@ -332,7 +330,6 @@ function Content({ onSidebarHide }) {
       departures: departuresByHour[hour] || 0,
     };
   });
-  
 
   const hourlyDeparturesData = Object.keys(departuresByHour).map((hour) => {
     return {
@@ -434,7 +431,6 @@ function Content({ onSidebarHide }) {
                   Airport Data Visualization
                 </div>
               </div>
-            
             </div>
             <IconButton
               icon="res-react-dash-sidebar-open"
@@ -490,7 +486,6 @@ function Content({ onSidebarHide }) {
                     className="w-4 h-4"
                   />
                   <DropDown />
-                  
                 </div>
                 <ResponsiveContainer width="100%" height={600}>
                   {status === "Arrivals" ? (
@@ -773,7 +768,7 @@ const getStatusButtonStyles = (status) => {
 };
 
 function TopFlights() {
-  const { flightsByDay, isLoading } = useContext(FlightsContext);
+  const { flightsByDay, isLoading, selectedDay } = useContext(FlightsContext);
   const buttonAnimation = useSpring({
     from: { boxShadow: "0 0 0px rgba(0,0,0,0)" },
     to: { boxShadow: "0 0 10px rgba(0,0,0,0.5)" },
@@ -787,22 +782,24 @@ function TopFlights() {
         <Icon path="res-react-dash-plus" className="w-5 h-5" />
       </div>
       <div className="flex flex-wrap items-center font-bold text-white">
-        <div className="w-full sm:w-1/6">Flight #</div>
-        <div className="w-full sm:w-1/6">Airline</div>
-        <div className="w-full sm:w-1/6">Airport</div>
-        <div className="w-full sm:w-1/6">Status</div>
-        <div className="w-full sm:w-1/6">Scheduled Time</div>
-        <div className="w-full sm:w-1/6">Estimated Time</div>
+        <div className="w-full sm:w-1/7">Flight #</div>
+        <div className="w-full sm:w-1/7">Airline</div>
+        <div className="w-full sm:w-1/7">Airport</div>
+        <div className="w-full sm:w-1/7">Leg</div>
+        <div className="w-full sm:w-1/7">Status</div>
+        <div className="w-full sm:w-1/7">Scheduled Time</div>
+        <div className="w-full sm:w-1/7">Estimated Time</div>
       </div>
       {isLoading ? (
         <Loader />
       ) : (
-        flightsByDay?.today?.map(
+        flightsByDay[selectedDay]?.map(
           ({
             Id,
             ScheduledTime,
             EstimatedTime,
             Airline,
+            Leg,
             Airport,
             FlightNumber,
             YycStatus,
@@ -835,14 +832,17 @@ function TopFlights() {
                 className="flex flex-wrap items-center mt-3 border-b-2 border-gray-700 pb-2"
                 key={Id}
               >
-                <div className="w-full sm:w-1/6">{FlightNumber}</div>
-                <div className="w-full sm:w-1/6">
+                <div className="w-full sm:w-1/7">{FlightNumber}</div>
+                <div className="w-full sm:w-1/7">
                   <TooltipWithAnimation content={AIRPLANE_IMG[Airline.Name]}>
                     {Airline.Name}
                   </TooltipWithAnimation>
                 </div>
-                <div className="w-full sm:w-1/6">{Airport.Name}</div>
-                <div className="w-full sm:w-1/6">
+                <div className="w-full sm:w-1/7">{Airport.Name}</div>
+                <div className="w-full sm:w-1/7">
+                  {Leg === "A" ? "Arrival" : "Departure"}
+                </div>
+                <div className="w-full sm:w-1/7">
                   {YycStatus.PrimaryStatus.ShortEnglishText && (
                     <animated.button
                       className={`inline-block rounded-md text-white font-semibold py-2 px-4 my-2 sm:my-0 transition-colors duration-300 ${getStatusButtonStyles(
@@ -854,8 +854,8 @@ function TopFlights() {
                     </animated.button>
                   )}
                 </div>
-                <div className="w-full sm:w-1/6">{scheduled}</div>
-                <div className="w-full sm:w-1/6">{estimated}</div>
+                <div className="w-full sm:w-1/7">{scheduled}</div>
+                <div className="w-full sm:w-1/7">{estimated}</div>
               </div>
             );
           }

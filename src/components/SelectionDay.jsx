@@ -8,7 +8,12 @@ import {
   MenuList,
   Portal,
 } from "@chakra-ui/react";
-import { CalendarIcon, InfoIcon, TimeIcon } from "@chakra-ui/icons";
+import {
+  CalendarIcon,
+  ChevronDownIcon,
+  InfoIcon,
+  TimeIcon,
+} from "@chakra-ui/icons";
 import { ListItem } from "./ListItem";
 import { FlightsContext } from "../context/Flights";
 
@@ -39,6 +44,7 @@ export function SelectionDay() {
         {Icon[selectedDay]}
         &nbsp;
         {selectedDay[0].toUpperCase() + selectedDay.slice(1)}
+        <ChevronDownIcon ml="2" />
       </MenuButton>
       <Portal>
         <MenuList>
